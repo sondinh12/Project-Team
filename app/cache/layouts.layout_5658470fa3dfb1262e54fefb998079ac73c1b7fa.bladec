@@ -46,7 +46,7 @@
  <a href="index.html"><i class="fa fa-th-large"></i> <span class="nav-label">Danh mục</span>
  <span class="fa arrow"></span></a>
  <ul class="nav nav-second-level">
- <li><a href="admin.categories">Quản lý danh mục</a></li>
+ <li><a href="<?=$_ENV['BASE_URL']?>admin/categories">Quản lý danh mục</a></li>
  </ul>
  </li>
 
@@ -76,12 +76,6 @@
  <div class="navbar-header">
  <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i
  class="fa fa-bars"></i> </a>
- <form role="search" class="navbar-form-custom" action="search_results.html">
- <div class="form-group">
- <input type="text" placeholder="Search for something..." class="form-control"
- name="top-search" id="top-search">
- </div>
- </form>
  </div>
  <ul class="nav navbar-top-links navbar-right">
  <li>
