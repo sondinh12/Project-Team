@@ -49,6 +49,5 @@ $router->mount('/admin', function() use ($router){
 });
 
 
-// ANh binh dep tarai
 $router->run();
 ?>
