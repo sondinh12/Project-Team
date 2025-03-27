@@ -70,10 +70,16 @@ class CategoryController {
     }
 
     public function destroy($id){
+        $countProducts = $this->cateModel->countProducts($id);
+        if($countProducts > 0){
+            $_SESSION['error'] = "Có sản phẩm không thể xóa danh mục này"; 
+            header('location: ' . $_ENV['BASE_URL'] . 'admin/categories/');
+            exit;
+        }
         $this->cateModel->destroy($id);
         $_SESSION['message'] = "Xóa thành công"; 
         header('location: ' . $_ENV['BASE_URL'] . 'admin/categories/');
-        exit;
+        exit;   
     }
 }
 ?>

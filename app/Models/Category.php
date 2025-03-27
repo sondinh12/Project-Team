@@ -39,6 +39,13 @@ class Category extends Model{
         $this->connection->executeStatement($stmt->getSQL(),$stmt->getParameters());    
     }
 
+    public function countProducts($id){
+        $stmt = $this->queryBuilder->select('COUNT(*) AS total')->from('products')->where('category_id = :id')
+        ->setParameter('id',$id)
+        ->executeQuery();
+        return $stmt->fetchOne();
+    }
+
     public function destroy($id){
         $stmt = $this->queryBuilder->delete('categories')->where('id_category = :id_category')
         ->setParameter('id_category',$id);

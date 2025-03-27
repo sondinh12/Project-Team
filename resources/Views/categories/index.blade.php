@@ -10,6 +10,11 @@
         echo $_SESSION['message'];
         unset($_SESSION['message']);
     }
+
+    if(isset($_SESSION['error'])){
+        echo $_SESSION['error'];
+        unset($_SESSION['error']);
+    }
 @endphp
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
@@ -36,7 +41,7 @@
                         <td>{{$cate['created_at']}}</td>
                         <td>{{$cate['updated_at']}}</td>
                         <td>
-                            <a href="#" class="btn btn-sm btn-primary">Chi tiết</a>
+                            <a href="<?=$_ENV['BASE_URL'] . 'admin/categories/show/' . $cate['id_category']?>" class="btn btn-sm btn-primary">Chi tiết</a>
                             <a href="<?=$_ENV['BASE_URL'] . 'admin/categories/update/' . $cate['id_category']?>" class="btn btn-sm btn-warning">Sửa</a>
                             <a href="<?=$_ENV['BASE_URL'] . 'admin/categories/destroy/' . $cate['id_category']?>" class="btn btn-sm btn-danger" onclick="return confirm('Bạn muốn xóa chứ?')">Xóa</a>
                         </td>

@@ -1,6 +1,7 @@
 <?php
 
 use App\Controllers\CategoryController;
+use App\Controllers\ProductController;
 session_start();
 include 'vendor/autoload.php';
 use App\Controllers\HomeController;
@@ -38,12 +39,13 @@ $router->mount('/admin', function() use ($router){
         $router->match('GET|POST', '/update/(\d+)',CategoryController::class . '@update');
     });
 
-//     $router->mount('/product', function() use ($router){
-//         $router->get('/',ProductController::class . '@getAllPro');
-//         $router->match('GET|POST','/add', ProductController::class . '@addPro');
-//         $router->match('GET|POST', '/delete/(\d+)',ProductController::class . '@deletePro');
-//         $router->match('GET|POST', '/update/(\d+)',ProductController::class . '@updatePro');
-//     });
+    $router->mount('/products', function() use ($router){
+        $router->get('/',ProductController::class . '@index');
+        $router->get('/show/(\d+)',ProductController::class . '@show');
+        $router->match('GET|POST','/create', ProductController::class . '@create');
+        $router->match('GET|POST', '/destroy/(\d+)',ProductController::class . '@destroy');
+        $router->match('GET|POST', '/update/(\d+)',ProductController::class . '@update');
+    });
 });
 
 $router->run();
