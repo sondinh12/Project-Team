@@ -1,6 +1,7 @@
 <?php
 
 use App\Controllers\CategoryController;
+use App\Controllers\ClientController;
 use App\Controllers\ProductController;
 session_start();
 include 'vendor/autoload.php';
@@ -13,7 +14,6 @@ $dotenv = Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 const ROOT_PATH = __DIR__;
 $router = new Router();
-$router->get('/',HomeController::class . '@index');
 // $router->before('GET|POST', '/admin(|/.*)', function() {
 //     AuthMiddleware::checkAdmin();
 // });
@@ -47,6 +47,18 @@ $router->mount('/admin', function() use ($router){
         $router->match('GET|POST', '/update/(\d+)',ProductController::class . '@update');
     });
 });
+
+
+$router->mount('', function() use ($router){
+    $router->get('/',function(){
+        header("Location: " . $_ENV['BASE_URL'] . 'home');
+        exit();
+    });
+    $router->get('/home',ClientController::class . '@index');
+    $router->get('/detail/(\d+)',ClientController::class . '@detail');
+
+});
+
 
 $router->run();
 ?>
