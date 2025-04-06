@@ -35,7 +35,8 @@
 
     // Vendor carousel
     $('.vendor-carousel').owlCarousel({
-        loop: true,
+        loop: false,
+        rewind: true,
         margin: 29,
         nav: false,
         autoplay: true,
@@ -62,9 +63,9 @@
 
     // Related carousel
     $('.related-carousel').owlCarousel({
-        loop: true,
+        loop: false,
         margin: 29,
-        nav: false,
+        nav: true,
         autoplay: true,
         smartSpeed: 1000,
         responsive: {

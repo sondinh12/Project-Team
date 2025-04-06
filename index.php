@@ -1,5 +1,6 @@
 <?php
 
+use App\Controllers\CartController;
 use App\Controllers\CategoryController;
 use App\Controllers\ClientController;
 use App\Controllers\ProductController;
@@ -56,7 +57,12 @@ $router->mount('', function() use ($router){
     });
     $router->get('/home',ClientController::class . '@index');
     $router->get('/detail/(\d+)',ClientController::class . '@detail');
-
+    $router->get('/cart',CartController::class . '@cart');
+    $router->post('/cart/addToCart',CartController::class . '@addtoCart');
+    $router->post('/cart/updateToCart',CartController::class . '@updateCartQuantity');
+    $router->post('/cart/deleteToCart',CartController::class . '@deleteCart');
+    $router->post('/handleaction',CartController::class . '@handleAction');
+    $router->match('GET|POST','/login',ClientController::class . '@login');
 });
 
 
