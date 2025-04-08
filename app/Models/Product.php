@@ -75,5 +75,13 @@ class Product extends Model {
         ->setParameter('id_product',$id);
         $this->connection->executeStatement($stmt->getSQL(),$stmt->getParameters());  
     }
+
+    public function searchByName($pro_name){
+        $stmt = $this->queryBuilder->select('*')->from('products')
+            ->where('product_name LIKE :product_name')
+            ->setParameter('product_name', "%$pro_name%")
+            ->executeQuery();
+        return $stmt->fetchAllAssociative();
+    }
 }
 ?>

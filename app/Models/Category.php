@@ -51,5 +51,13 @@ class Category extends Model{
         ->setParameter('id_category',$id);
         $this->connection->executeStatement($stmt->getSQL(),$stmt->getParameters()); 
     }
+
+    public function searchByName($cate_name){
+        $stmt = $this->queryBuilder->select('*')->from('categories')
+            ->where('category_name LIKE :category_name')
+            ->setParameter('category_name', "%$cate_name%")
+            ->executeQuery();
+        return $stmt->fetchAllAssociative();
+    }
 }
 ?>

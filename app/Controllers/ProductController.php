@@ -11,8 +11,16 @@ class ProductController {
     }
 
     public function index(){
-        $products = $this->proModel->index();
-        Blade::render('products.index',['products'=>$products]);
+        $pro_name = $_GET['pro_name'] ?? '';
+        if(!empty($pro_name)){
+            $products = $this->proModel->searchByName($pro_name);
+        } else {
+            $products = $this->proModel->index();
+        }
+        Blade::render('admin.products.index',[
+            'products'=>$products,
+            'keyword' => $pro_name
+        ]);
     }
 
     public function create(){
@@ -52,7 +60,7 @@ class ProductController {
             exit;
         }
         $categories = $this->proModel->getCate();
-        Blade::render('products.create',[
+        Blade::render('admin.products.create',[
             'categories'=>$categories,
             'errors' => $_SESSION['errors'] ?? [],
             'old' => $_SESSION['old'] ?? []
@@ -97,7 +105,7 @@ class ProductController {
             header('location: ' . $_ENV['BASE_URL'] . 'admin/products');
             exit;
         }
-        Blade::render('products.update',[
+        Blade::render('admin.products.update',[
             'proOld'=>$proOld,
             'categories'=>$categories,
             'errors' => $_SESSION['errors'] ?? [],

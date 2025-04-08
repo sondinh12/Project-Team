@@ -1,4 +1,7 @@
 <?php
+
+
+
 session_start();
 date_default_timezone_set('Asia/Ho_Chi_Minh');
 include 'vendor/autoload.php';
@@ -9,12 +12,17 @@ use Dotenv\Dotenv;
 use App\Controllers\CategoryController;
 use App\Controllers\ProductController;
 use App\Controllers\UserController;
+use App\Controllers\CartController;
+use App\Controllers\ClientController;
+
 
 $dotenv = Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 const ROOT_PATH = __DIR__;
 $router = new Router();
+
 $router->get('/', HomeController::class . '@index');
+
 // $router->before('GET|POST', '/admin(|/.*)', function() {
 //     AuthMiddleware::checkAdmin();
 // });
@@ -50,5 +58,20 @@ $router->mount('/admin', function () use ($router) {
 
 });
 
+
+$router->mount('', function() use ($router){
+    $router->get('/',function(){
+        header("Location: " . $_ENV['BASE_URL'] . 'home');
+        exit();
+    });
+    $router->get('/home',ClientController::class . '@index');
+    $router->get('/detail/(\d+)',ClientController::class . '@detail');
+    $router->get('/cart',CartController::class . '@cart');
+    $router->post('/cart/addToCart',CartController::class . '@addtoCart');
+    $router->post('/cart/updateToCart',CartController::class . '@updateCartQuantity');
+    $router->post('/cart/deleteToCart',CartController::class . '@deleteCart');
+    $router->post('/handleaction',CartController::class . '@handleAction');
+    $router->match('GET|POST','/login',ClientController::class . '@login');
+});
 
 $router->run();

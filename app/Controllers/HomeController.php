@@ -5,7 +5,7 @@ use App\Common\Blade;
 
 class HomeController {
     public function index(){
-        Blade::render('layouts.layout');
+        Blade::render('admin.layouts.layout');
     }
 }
 ?>
