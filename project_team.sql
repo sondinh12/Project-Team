@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Mar 19, 2025 at 02:26 PM
+-- Generation Time: Apr 08, 2025 at 03:43 PM
 -- Server version: 8.0.30
 -- PHP Version: 8.2.20
 
@@ -31,6 +31,7 @@ CREATE TABLE `cart` (
   `id_cart` int NOT NULL,
   `user_id` int DEFAULT NULL,
   `product_id` int DEFAULT NULL,
+  `quantity` int NOT NULL,
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -39,10 +40,12 @@ CREATE TABLE `cart` (
 -- Dumping data for table `cart`
 --
 
-INSERT INTO `cart` (`id_cart`, `user_id`, `product_id`, `created_at`, `updated_at`) VALUES
-(1, 1, 1, '2025-03-19 21:25:11', '2025-03-19 21:25:11'),
-(2, 2, 2, '2025-03-19 21:25:11', '2025-03-19 21:25:11'),
-(3, 3, 3, '2025-03-19 21:25:11', '2025-03-19 21:25:11');
+INSERT INTO `cart` (`id_cart`, `user_id`, `product_id`, `quantity`, `created_at`, `updated_at`) VALUES
+(1, 1, 1, 2, '2025-03-19 21:25:11', '2025-04-04 20:41:24'),
+(3, 3, 3, 4, '2025-03-19 21:25:11', '2025-04-04 20:41:38'),
+(12, 2, 1, 12, '2025-04-06 20:42:39', '2025-04-07 00:15:42'),
+(13, 2, 2, 4, '2025-04-06 22:22:25', '2025-04-06 23:35:28'),
+(15, 2, 3, 2, '2025-04-07 00:13:55', '2025-04-07 00:14:04');
 
 -- --------------------------------------------------------
 
@@ -64,7 +67,8 @@ CREATE TABLE `categories` (
 INSERT INTO `categories` (`id_category`, `category_name`, `created_at`, `updated_at`) VALUES
 (1, 'Áo thun', '2025-03-19 21:24:14', '2025-03-19 21:24:14'),
 (2, 'Quần jean', '2025-03-19 21:24:14', '2025-03-19 21:24:14'),
-(3, 'Giày thể thao', '2025-03-19 21:24:14', '2025-03-19 21:24:14');
+(3, 'Giày thể thao', '2025-03-19 21:24:14', '2025-03-19 21:24:14'),
+(10, 'Acer', '2025-04-03 09:27:24', '2025-04-03 09:27:24');
 
 -- --------------------------------------------------------
 
@@ -161,9 +165,10 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`id_product`, `product_name`, `product_img`, `price`, `quantity`, `description`, `category_id`, `status`, `created_at`, `updated_at`) VALUES
-(1, 'Áo thun nam', 'ao_thun.jpg', 150000.00, 50, 'Áo thun chất cotton cao cấp', 1, 'active', '2025-03-19 21:24:39', '2025-03-19 21:24:39'),
-(2, 'Quần jean nam', 'quan_jean.jpg', 350000.00, 30, 'Quần jean cao cấp, co giãn tốt', 2, 'active', '2025-03-19 21:24:39', '2025-03-19 21:24:39'),
-(3, 'Giày thể thao', 'giay_the_thao.jpg', 500000.00, 20, 'Giày thể thao nhẹ, bền đẹp', 3, 'active', '2025-03-19 21:24:39', '2025-03-19 21:24:39');
+(1, 'Áo thun nam', 'uploads/products/1743647534_ẢNH 5.png', 150000.00, 50, 'Áo thun chất cotton cao cấp', 1, 'active', '2025-04-03 09:32:14', '2025-04-03 09:32:14'),
+(2, 'Quần jean nam', 'uploads/products/1743647523_Screenshot 2023-12-03 103726.png', 350000.00, 30, 'Quần jean cao cấp, co giãn tốt', 2, 'active', '2025-04-03 09:32:03', '2025-04-03 09:32:03'),
+(3, 'Giày thể thao', 'uploads/products/1743087865_Screenshot 2023-12-03 103716.png', 500000.00, 20, 'Giày thể thao nhẹ, bền đẹp', 3, 'active', '2025-03-27 22:04:25', '2025-03-27 22:04:25'),
+(4, 'sss', 'uploads/products/1743087421_Screenshot 2023-11-19 205308.png', 89457.00, 1, 'ưkmkg', 1, 'inactive', '2025-03-27 21:57:46', '2025-03-27 21:57:46');
 
 -- --------------------------------------------------------
 
@@ -320,13 +325,13 @@ ALTER TABLE `vouchers`
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `id_cart` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_cart` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id_category` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_category` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `comments`
@@ -350,7 +355,7 @@ ALTER TABLE `order_details`
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id_product` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_product` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `users`
@@ -406,6 +411,15 @@ ALTER TABLE `products`
 --
 ALTER TABLE `tokens`
   ADD CONSTRAINT `tokens_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `users` (`id_user`) ON DELETE CASCADE;
+
+DELIMITER $$
+--
+-- Events
+--
+CREATE DEFINER=`root`@`localhost` EVENT `delete_expired_tokens` ON SCHEDULE EVERY 10 MINUTE STARTS '2025-04-08 21:22:22' ON COMPLETION NOT PRESERVE ENABLE DO DELETE FROM tokens 
+  WHERE token_expiry < NOW() - INTERVAL 10 MINUTE$$
+
+DELIMITER ;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
