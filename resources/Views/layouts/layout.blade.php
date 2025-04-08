@@ -57,7 +57,7 @@
                     <a href="index.html"><i class="fa fa-th-large"></i> <span class="nav-label">Sản phẩm</span>
                         <span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
-                        <li><a href="">Quản lý sản phẩm</a></li>
+                        <li><a href="<?=$_ENV['BASE_URL']?>admin/products">Quản lý sản phẩm</a></li>
                     </ul>
                 </li>
 
@@ -65,7 +65,7 @@
                     <a href="index.html"><i class="fa fa-th-large"></i> <span class="nav-label">Người dùng</span>
                         <span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
-                        <li><a href="index.html">Quản lý người dùng</a></li>
+                        <li><a href="<?=$_ENV['BASE_URL']?>admin/users">Quản lý người dùng</a></li>
                     </ul>
                 </li>
             </ul>
