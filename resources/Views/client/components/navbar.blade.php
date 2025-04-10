@@ -37,8 +37,11 @@
                         <a href="contact.html" class="nav-item nav-link">Contact</a>
                     </div>
                     <div class="navbar-nav ml-auto py-0">
-                        <a href="<?=$_ENV['BASE_URL'] . 'login'?>" class="nav-item nav-link">Login</a>
-                        <a href="" class="nav-item nav-link">Register</a>
+                        @if(isset($_SESSION['user']))
+                        <a href="<?=$_ENV['BASE_URL'] . 'logout'?>" class="nav-item nav-link">Đăng xuất</a>
+                        @else
+                        <a href="<?=$_ENV['BASE_URL'] . 'login'?>" class="nav-item nav-link">Đăng nhập</a>
+                        @endif
                     </div>
                 </div>
             </nav>

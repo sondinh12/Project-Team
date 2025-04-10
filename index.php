@@ -2,11 +2,13 @@
 
 
 
+
+
 session_start();
-date_default_timezone_set('Asia/Ho_Chi_Minh');
 include 'vendor/autoload.php';
 
 use App\Controllers\HomeController;
+use App\Middlewares\AuthMiddleware;
 use Bramus\Router\Router;
 use Dotenv\Dotenv;
 use App\Controllers\BillController;
@@ -15,7 +17,7 @@ use App\Controllers\CategoryController;
 use App\Controllers\ClientController;
 use App\Controllers\ProductController;
 use App\Controllers\UserController;
-
+use App\Controllers\AuthController;
 
 
 $dotenv = Dotenv::createImmutable(__DIR__);
@@ -23,26 +25,30 @@ $dotenv->load();
 const ROOT_PATH = __DIR__;
 $router = new Router();
 
+
 $router->get('/', HomeController::class . '@index');
 
 // $router->before('GET|POST', '/admin(|/.*)', function() {
+// $router->before('GET|POST', '/admin(|/.*)', function () {
+
 //     AuthMiddleware::checkAdmin();
 // });
 
-// $router->before('GET|POST', '/', function() {
-//     AuthMiddleware::log();
-// });
-// $router->match('GET|POST','/login',LoginController::class . '@login');
-// $router->post('/logout',LoginController::class . '@logout');
+$router->before('GET|POST', '/admin', function () {
+    AuthMiddleware::log();
+});
+$router->match('GET|POST', '/login', AuthController::class . '@login');
+$router->match('GET|POST', '/forgotpass', AuthController::class . '@forgotpass');
+$router->get('/logout', AuthController::class . '@logout');
 $router->mount('/admin', function () use ($router) {
     $router->get('/', HomeController::class . '@index');
     $router->mount('/users', function () use ($router) {
         $router->get('/', UserController::class . '@index');
         $router->match('GET|POST', '/create', UserController::class . '@create');
-        // $router->match('GET|POST', '/destroy/(\d+)', UserController::class . '@destroy');
         $router->match('GET|POST', '/changestatus/(\d+)', UserController::class . '@changestatus');
         $router->match('GET|POST', '/update/(\d+)', UserController::class . '@update');
     });
+
 
     $router->mount('/products', function() use ($router){
         $router->get('/',ProductController::class . '@index');
@@ -67,11 +73,12 @@ $router->mount('/admin', function () use ($router) {
         $router->match('GET|POST','/edit/(\d+)',BillController::class . '@edit');
     });
 
+
 });
 
 
-$router->mount('', function() use ($router){
-    $router->get('/',function(){
+$router->mount('', function () use ($router) {
+    $router->get('/', function () {
         header("Location: " . $_ENV['BASE_URL'] . 'home');
         exit();
     });
@@ -86,6 +93,7 @@ $router->mount('', function() use ($router){
     $router->get('/checkout',CartController::class . '@checkoutPro');
     $router->post('/placeorder',CartController::class . '@placeOrder');
     $router->get('/bill',ClientController::class . '@bill');
+
 });
 
 $router->run();
