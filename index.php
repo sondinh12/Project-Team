@@ -1,5 +1,6 @@
 <?php
 
+use App\Controllers\BillController;
 use App\Controllers\CartController;
 use App\Controllers\CategoryController;
 use App\Controllers\ClientController;
@@ -47,6 +48,12 @@ $router->mount('/admin', function() use ($router){
         $router->match('GET|POST', '/destroy/(\d+)',ProductController::class . '@destroy');
         $router->match('GET|POST', '/update/(\d+)',ProductController::class . '@update');
     });
+
+    $router->mount('/bill', function () use ($router){
+        $router->get('/',BillController::class . '@index');
+        $router->get('/detail/(\d+)',BillController::class . '@detail');
+        $router->match('GET|POST','/edit/(\d+)',BillController::class . '@edit');
+    });
 });
 
 
@@ -59,10 +66,13 @@ $router->mount('', function() use ($router){
     $router->get('/detail/(\d+)',ClientController::class . '@detail');
     $router->get('/cart',CartController::class . '@cart');
     $router->post('/cart/addToCart',CartController::class . '@addtoCart');
-    $router->post('/cart/updateToCart',CartController::class . '@updateCartQuantity');
+    $router->post('/cart/updateToCart',CartController::class . '@updateCartQuantityPro');
     $router->post('/cart/deleteToCart',CartController::class . '@deleteCart');
-    $router->post('/handleaction',CartController::class . '@handleAction');
+    $router->post('/cart/handleaction',CartController::class . '@handleAction');
     $router->match('GET|POST','/login',ClientController::class . '@login');
+    $router->get('/checkout',CartController::class . '@checkoutPro');
+    $router->post('/placeorder',CartController::class . '@placeOrder');
+    $router->get('/bill',ClientController::class . '@bill');
 });
 
 

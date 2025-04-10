@@ -88,5 +88,126 @@ class Cart extends Model {
         
     }
 
+    public function totalPrice($id_user)
+    {
+        $stmt = $this->queryBuilder
+            ->select('SUM(prod.price * ca.quantity) AS total_price')
+            ->from('cart', 'ca')
+            ->join('ca', 'products', 'prod', 'ca.product_id = prod.id_product')
+            ->where('ca.user_id = :user_id')
+            ->setParameter('user_id', $id_user);
+    
+        $result = $this->connection->fetchAssociative($stmt->getSQL(), $stmt->getParameters());
+    
+        return $result['total_price'] ?? 0;
+    }
+
+    //order
+
+    function getAllInfoUser($id_user) {
+        $stmt = $this->queryBuilder
+            ->select('*')
+            ->from('users')
+            ->where('id_user = :id_user')
+            ->setParameter('id_user', $id_user);
+    
+        return $this->connection->fetchAssociative(
+            $stmt->getSQL(),
+            $stmt->getParameters()
+        );
+    }
+    
+    function getSelectedPro($id_user, $product_id) {
+        $productPlaceholders = [];
+        $params = ['user_id' => $id_user];
+    
+        foreach ($product_id as $index => $id) {
+            $key = "id_$index";
+            $productPlaceholders[] = ":$key";
+            $params[$key] = $id;
+        }
+    
+        $qb = $this->connection->createQueryBuilder(); // tạo mới QueryBuilder
+    
+        $qb->select('p.id_product', 'p.product_name', 'p.price', 'c.quantity', 'c.product_id')
+            ->from('products', 'p')
+            ->innerJoin('p', 'cart', 'c', 'p.id_product = c.product_id')
+            ->where('c.user_id = :user_id')
+            ->andWhere(
+                $qb->expr()->in('c.product_id', $productPlaceholders)
+            );
+    
+        $stmt = $this->connection->executeQuery($qb->getSQL(), $params);
+    
+        return $stmt->fetchAllAssociative();
+    }
+    
+    
+    function createOrders($id_user) {
+        $this->connection->insert('orders', [
+            'id_user'    => $id_user,
+            'total'     => $_POST['total'],
+            'payment'   => $_POST['payment'],
+            'status'    => 1,
+            'created_at' => (new \DateTime('now', new \DateTimeZone('Asia/Ho_Chi_Minh')))->format('Y-m-d H:i:s'),
+            'updated_at' => (new \DateTime('now', new \DateTimeZone('Asia/Ho_Chi_Minh')))->format('Y-m-d H:i:s'),
+
+        ]);
+    
+        return $this->connection->lastInsertId();
+    }
+    
+    function getCartByIdUser($id_user) {
+        $qb = $this->queryBuilder;
+    
+        $qb
+            ->select('c.*','p.price')
+            ->from('cart','c')
+            ->join('c','products','p','p.id_product = c.product_id')
+            ->where('user_id = :user_id')
+            ->setParameter('user_id', $id_user);
+    
+        $stmt = $this->connection->executeQuery($qb->getSQL(), $qb->getParameters());
+    
+        return $stmt->fetchAllAssociative();
+    }
+    
+    function addOrdersDetail($id_orders, $id_pro, $price, $quantity) {
+        $this->connection->insert('order_details', [
+            'order_id' => $id_orders,
+            'pro_id'    => $id_pro,
+            'quantity'  => $quantity,
+            'created_at' => (new \DateTime('now', new \DateTimeZone('Asia/Ho_Chi_Minh')))->format('Y-m-d H:i:s'),
+        ]);
+    
+        return true;
+    }
+    
+    function reduceStock($pro_id, $quantity) {
+        $this->queryBuilder
+            ->update('products')
+            ->set('quantity', 'quantity - :quantity')
+            ->where('id_pro = :id_pro')
+            ->setParameter('quantity', $quantity)
+            ->setParameter('id_pro', $pro_id);
+    
+        $this->connection->executeStatement(
+            $this->queryBuilder->getSQL(),
+            $this->queryBuilder->getParameters()
+        );
+    
+        return true;
+    }
+    
+    
+    function clearCart($id_user, $pro_id) {
+        $this->connection->delete('cart', [
+            'user_id' => $id_user,
+            'product_id'  => $pro_id,
+        ]);
+    
+        return true;
+    }
+    
 }
 ?>

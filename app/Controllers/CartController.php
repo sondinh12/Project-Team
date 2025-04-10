@@ -1,7 +1,8 @@
 <?php
 namespace App\Controllers;
 use App\Common\Blade;
-use App\Models\Cart; 
+use App\Models\Cart;
+use App\Models\Category; 
 
 class CartController {
     protected $cartModel;
@@ -16,10 +17,12 @@ class CartController {
         $id = $_SESSION['id_user'];
         // var_dump($id);
         $categories = $this->cartModel->getCategories();
+        $totalPrice = $this->cartModel->totalPrice($id);
         $proCart = $this->cartModel->showCart($id); 
         Blade::render('client.cart',[
             'categories'=>$categories,
-            'proCart'=>$proCart
+            'proCart'=>$proCart,
+            'totalPrice'=>$totalPrice
         ]);
     }
 
@@ -36,7 +39,7 @@ class CartController {
         }
     }
 
-    public function updateCartQuantity(){
+    public function updateCartQuantityPro(){
         if(isset($_SESSION['id_user'])){
             $id_user = $_SESSION['id_user'];
             if(isset($_POST['btn_updatecart'])){
@@ -49,6 +52,8 @@ class CartController {
                     $this->cartModel->updateCartQuantity($id_user, $newQuantity);
                     header("location:" . $_ENV['BASE_URL'] . 'cart');
                     exit;
+                } if ($newQuantity == 0){
+                    echo "Lỗi";
                 }
             }
         }
@@ -68,11 +73,86 @@ class CartController {
     public function handleAction(){
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
             if(isset($_POST['btn_updatecart'])){
-                $this->updateCartQuantity();
+                $this->updateCartQuantityPro();
             }elseif (isset($_POST['btn_deletecart'])) {
                 $this->deleteCart();
+            } else if(isset($_POST['btn_checkout'])){
+                $this->checkoutPro();
+                
             }
         }
-    }   
+    } 
+    
+    
+    //order
+    function checkoutPro()
+    {
+        // if (!isset($_POST['btn_checkout']) || !isset($_SESSION['id_user'])) {
+        //     return;
+        // }
+
+        if(isset($_POST['btn_checkout'])){
+            $id_user = $_SESSION['id_user'];
+            $info = $this->cartModel->getAllInfoUser($id_user);
+            $selectedPro = $_POST['selected_pro'] ?? [];
+
+            if (empty($selectedPro)) {
+                echo "Vui lòng chọn sản phẩm để thanh toán";
+                return;
+            }
+
+            $productsSelect = $this->cartModel->getSelectedPro($id_user, $selectedPro);
+
+            $totalCheckout = 0;
+            foreach ($productsSelect as $product) {
+                $totalCheckout += $product['price'] * $product['quantity'];
+            }
+
+            $categories = $this->cartModel->getCategories();
+            Blade::render('client.checkout', [
+                'productsSelect' => $productsSelect,
+                'totalCheckout' => $totalCheckout,
+                'categories' => $categories,
+                'info' => $info,
+            ]);
+        }
+        
+    }
+
+
+    function placeOrder()
+{
+    if (!isset($_SESSION['id_user']) || !isset($_POST['btn_placeorder'])) {
+        return;
+    }
+    if(isset($_SESSION['id_user']) && isset($_POST['btn_placeorder'])){
+        $id_user = $_SESSION['id_user'];
+        $selectedPro = $_POST['selected_pro'] ?? [];
+
+
+        $id_orders = $this->cartModel->createOrders($id_user);
+        $cartItems = $this->cartModel->getCartByIdUser($id_user);
+
+        foreach ($cartItems as $item) {
+            $pro_id = (int)$item['product_id'];
+
+            // Nếu sản phẩm không nằm trong danh sách được chọn -> bỏ qua
+            if (!isset($selectedPro[$pro_id])) {
+                continue;
+            }
+
+            $quantity = $selectedPro[$pro_id];
+            $product_price = $item['price'];
+
+            $this->cartModel->addOrdersDetail($id_orders, $pro_id, $product_price, $quantity);
+            // $this->cartModel->reduceStock($pro_id, $quantity);
+            $this->cartModel->clearCart($id_user, $pro_id);
+        }
+
+        header("Location: " . $_ENV['BASE_URL'] );
+        exit;
+    }
+}
+
 }
 ?>

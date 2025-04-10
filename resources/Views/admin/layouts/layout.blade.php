@@ -65,6 +65,14 @@
                         <li><a href="index.html">Quản lý người dùng</a></li>
                     </ul>
                 </li>
+
+                <li class="active">
+                    <a href="<?=$_ENV['BASE_URL']?>admin/bill"><i class="fa fa-th-large"></i> <span class="nav-label">Hóa đơn</span>
+                        <span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        <li><a href="<?=$_ENV['BASE_URL']?>admin/bill">Quản lý Hóa đơn</a></li>
+                    </ul>
+                </li>
             </ul>
 
         </div>
@@ -604,7 +612,7 @@
 <script src="<?=$_ENV['BASE_URL']?>resources/Views/admin/assets/js/plugins/pace/pace.min.js"></script>
 
 <script src="<?=$_ENV['BASE_URL']?>resources/Views/admin/assets/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
-
+@yield('script')
 
 </body>
 
