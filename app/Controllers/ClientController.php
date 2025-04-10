@@ -56,5 +56,12 @@ class ClientController {
         Blade::render('client.login');
     }
 
+    public function bill(){
+        $categories = $this->client->getCategories();  
+        Blade::render('client.bill',[
+            'categories'=>$categories
+        ]);
+    }
+
 }
 ?>

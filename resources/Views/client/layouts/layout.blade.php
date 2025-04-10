@@ -22,6 +22,7 @@
 
     {{-- script --}}
     @include('client.components.script')
+    @yield('script')
 </body>
 
 </html>

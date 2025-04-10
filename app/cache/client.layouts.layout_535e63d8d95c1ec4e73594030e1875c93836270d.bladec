@@ -22,6 +22,7 @@
 
  <?php /* script */ ?>
  <?php echo $this->runChild('client.components.script'); ?>
+ <?php echo $this->yieldContent('script'); ?>
 </body>
 
 </html>
