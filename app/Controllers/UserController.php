@@ -44,7 +44,7 @@ class UserController
     public function index()
     {
         $users = $this->UserModel->index();
-        return Blade::render('users.index', compact('users'));
+        return Blade::render('admin.users.index', compact('users'));
     }
     public function create()
     {
@@ -87,7 +87,7 @@ class UserController
             exit;
         }
 
-        Blade::render('users.create', [
+        Blade::render('admin.users.create', [
             'errors' => $_SESSION['errors'] ?? [],
             'old' => $_SESSION['old'] ?? []
         ]);
@@ -128,7 +128,7 @@ class UserController
             $_SESSION['message'] = "Cập nhật tài khoản thành công";
             header('location: ' . $_ENV['BASE_URL'] . 'admin/users');
         }
-        Blade::render('users.update', [
+        Blade::render('admin.users.update', [
             'errors' => $_SESSION['errors'] ?? [],
             'old' => $_SESSION['old'] ?? [],
             'user' => $user

@@ -39,10 +39,25 @@ class Category extends Model{
         $this->connection->executeStatement($stmt->getSQL(),$stmt->getParameters());    
     }
 
+    public function countProducts($id){
+        $stmt = $this->queryBuilder->select('COUNT(*) AS total')->from('products')->where('category_id = :id')
+        ->setParameter('id',$id)
+        ->executeQuery();
+        return $stmt->fetchOne();
+    }
+
     public function destroy($id){
         $stmt = $this->queryBuilder->delete('categories')->where('id_category = :id_category')
         ->setParameter('id_category',$id);
         $this->connection->executeStatement($stmt->getSQL(),$stmt->getParameters()); 
+    }
+
+    public function searchByName($cate_name){
+        $stmt = $this->queryBuilder->select('*')->from('categories')
+            ->where('category_name LIKE :category_name')
+            ->setParameter('category_name', "%$cate_name%")
+            ->executeQuery();
+        return $stmt->fetchAllAssociative();
     }
 }
 ?>

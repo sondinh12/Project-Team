@@ -43,7 +43,7 @@
  </div>
  </li>
  <li class="active">
- <a href="index.html"><i class="fa fa-th-large"></i> <span class="nav-label">Danh mục</span>
+ <a href="<?=$_ENV['BASE_URL']?>admin/categories"><i class="fa fa-th-large"></i> <span class="nav-label">Danh mục</span>
  <span class="fa arrow"></span></a>
  <ul class="nav nav-second-level">
  <li><a href="<?=$_ENV['BASE_URL']?>admin/categories">Quản lý danh mục</a></li>
@@ -51,10 +51,10 @@
  </li>
 
  <li class="active">
- <a href="index.html"><i class="fa fa-th-large"></i> <span class="nav-label">Sản phẩm</span>
+ <a href="<?=$_ENV['BASE_URL']?>admin/products"><i class="fa fa-th-large"></i> <span class="nav-label">Sản phẩm</span>
  <span class="fa arrow"></span></a>
  <ul class="nav nav-second-level">
- <li><a href="">Quản lý sản phẩm</a></li>
+ <li><a href="<?=$_ENV['BASE_URL']?>admin/products">Quản lý sản phẩm</a></li>
  </ul>
  </li>
 

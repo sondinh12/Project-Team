@@ -11,8 +11,16 @@ class CategoryController {
     }
 
     public function index(){
-        $categories = $this->cateModel->index();
-        Blade::render('categories.index',['categories'=>$categories]);
+        $cate_name = $_GET['cate_name'] ?? '';
+        if(!empty($cate_name)){
+            $categories = $this->cateModel->searchByName($cate_name);
+        } else {
+            $categories = $this->cateModel->index();
+        }
+        Blade::render('admin.categories.index',[
+            'categories'=>$categories,
+            'keyword' => $cate_name
+        ]);
     }
 
     public function create(){
@@ -35,7 +43,7 @@ class CategoryController {
             header('location:' . $_ENV['BASE_URL'] . 'admin/categories/');
             exit;
         }
-        Blade::render('categories.create',[
+        Blade::render('admin.categories.create',[
             'errors' => $_SESSION['errors'] ?? [],
             'old' => $_SESSION['old'] ?? []
         ]);
@@ -62,7 +70,7 @@ class CategoryController {
             header('location: ' . $_ENV['BASE_URL'] . 'admin/categories/');
             exit;
         }
-        Blade::render('categories.update',[
+        Blade::render('admin.categories.update',[
             'cateOld'=>$cateOld,
             'errors' => $_SESSION['errors'] ?? [],
         ]);
@@ -70,10 +78,16 @@ class CategoryController {
     }
 
     public function destroy($id){
+        $countProducts = $this->cateModel->countProducts($id);
+        if($countProducts > 0){
+            $_SESSION['error'] = "Có sản phẩm không thể xóa danh mục này"; 
+            header('location: ' . $_ENV['BASE_URL'] . 'admin/categories/');
+            exit;
+        }
         $this->cateModel->destroy($id);
         $_SESSION['message'] = "Xóa thành công"; 
         header('location: ' . $_ENV['BASE_URL'] . 'admin/categories/');
-        exit;
+        exit;   
     }
 }
 ?>
