@@ -1,0 +1,64 @@
+<?php $_shouldextend[1]=1; ?>
+
+<?php $this->startSection('title','Sửa trạng thái'); ?>
+
+<?php $this->startSection('content'); ?>
+<div class="container mt-4">
+ <h3 class="text-center text-primary mb-4">Cập nhật trạng thái đơn hàng</h3>
+
+ <form action="<?php echo \htmlentities($_ENV['BASE_URL'] . 'admin/bill/edit/' . $oldStatus['id_order']??'', ENT_QUOTES, 'UTF-8', false); ?>" method="post" class="mx-auto" style="max-width: 600px;">
+ <div class="mb-3">
+ <label for="status" class="form-label fw-bold">Trạng thái đơn hàng</label>
+ <select class="form-select" name="status" id="statusChange" onchange="handleStatusChange()">
+ <option value="pending" <?php echo \htmlentities($oldStatus['status'] == "pending" ? 'selected' : ''??'', ENT_QUOTES, 'UTF-8', false); ?>>Chờ xử lý</option>
+ <option value="confirmed" <?php echo \htmlentities($oldStatus['status'] == "confirmed" ? 'selected' : ''??'', ENT_QUOTES, 'UTF-8', false); ?>>Đã xác nhận</option>
+ <option value="delivering" <?php echo \htmlentities($oldStatus['status'] == "delivering" ? 'selected' : ''??'', ENT_QUOTES, 'UTF-8', false); ?>>Đang giao</option>
+ <option value="completed" <?php echo \htmlentities($oldStatus['status'] == "completed" ? 'selected' : ''??'', ENT_QUOTES, 'UTF-8', false); ?>>Hoàn tất</option>
+ <option value="cancelled" <?php echo \htmlentities($oldStatus['status'] == "cancelled" ? 'selected' : ''??'', ENT_QUOTES, 'UTF-8', false); ?>>Đã hủy</option>
+ </select>
+ <?php if(!empty($_SESSION['errors']['status'])): ?>
+ <div class="text-danger mt-1"><?php echo \htmlentities($_SESSION['errors']['status']??'', ENT_QUOTES, 'UTF-8', false); ?></div>
+ <?php endif; ?>
+ </div>
+
+ <input type="hidden" name="id_order" value="<?php echo \htmlentities($oldStatus['id_order']??'', ENT_QUOTES, 'UTF-8', false); ?>">
+
+ <div class="text-center">
+ <button type="submit" class="btn btn-success">Cập nhật</button>
+ <a href="<?php echo \htmlentities($_ENV['BASE_URL']??'', ENT_QUOTES, 'UTF-8', false); ?>admin/bill" class="btn btn-secondary ms-2">Quay lại</a>
+ </div>
+ </form>
+</div>
+<?php $this->stopSection(); ?>
+
+<?php $this->startSection('script'); ?>
+<script>
+ function handleStatusChange() {
+ const statusOrder = ['pending', 'confirmed', 'delivering', 'completed', 'cancelled'];
+
+ const previousStatus = "<?php echo \htmlentities($oldStatus['status']??'', ENT_QUOTES, 'UTF-8', false); ?>";
+ const statusSelect = document.getElementById("statusChange");
+ const selectedStatus = statusSelect.value;
+
+ const prevIndex = statusOrder.indexOf(previousStatus);
+ const selectedIndex = statusOrder.indexOf(selectedStatus);
+
+ // Nếu chọn sai (lùi trạng thái)
+ if (selectedIndex < prevIndex && selectedStatus !== 'cancelled') {
+ alert("Bạn không thể quay về trạng thái trước đó.");
+ statusSelect.value = previousStatus;
+ }
+
+ // Nếu chọn 'cancelled', xác nhận
+ if (selectedStatus === 'cancelled') {
+ const confirmCancel = confirm("Bạn có chắc chắn muốn hủy đơn hàng?");
+ if (!confirmCancel) {
+ statusSelect.value = previousStatus;
+ }
+ }
+ }
+</script>
+<?php $this->stopSection(); ?>
+
+
+<?php if (isset($_shouldextend[1])) { echo $this->runChild('admin.layouts.layout'); } ?>
