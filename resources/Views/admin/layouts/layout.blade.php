@@ -73,6 +73,14 @@
                         <li><a href="<?=$_ENV['BASE_URL']?>admin/bill">Quản lý Hóa đơn</a></li>
                     </ul>
                 </li>
+
+                <li class="active">
+                    <a href="<?=$_ENV['BASE_URL']?>admin/bill"><i class="fa fa-th-large"></i> <span class="nav-label">Thống kê</span>
+                        <span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        <li><a href="<?=$_ENV['BASE_URL']?>admin/statistic">Quản lý Thống kê</a></li>
+                    </ul>
+                </li>
             </ul>
 
         </div>

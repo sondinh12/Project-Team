@@ -149,7 +149,7 @@ class CartController {
             $this->cartModel->clearCart($id_user, $pro_id);
         }
 
-        header("Location: " . $_ENV['BASE_URL'] );
+        header("Location: " . $_ENV['BASE_URL'] . 'home' );
         exit;
     }
 }

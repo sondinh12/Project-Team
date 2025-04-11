@@ -5,6 +5,7 @@ use App\Controllers\CartController;
 use App\Controllers\CategoryController;
 use App\Controllers\ClientController;
 use App\Controllers\ProductController;
+use App\Controllers\StatisticController;
 session_start();
 include 'vendor/autoload.php';
 use App\Controllers\HomeController;
@@ -54,6 +55,8 @@ $router->mount('/admin', function() use ($router){
         $router->get('/detail/(\d+)',BillController::class . '@detail');
         $router->match('GET|POST','/edit/(\d+)',BillController::class . '@edit');
     });
+
+    $router->match('GET|POST','/statistic',StatisticController::class . '@statistic');
 });
 
 
