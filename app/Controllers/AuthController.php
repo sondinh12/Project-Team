@@ -47,6 +47,7 @@ class AuthController
             }
 
             $_SESSION['user'] = $user;
+            $_SESSION['id_user'] = $user['id_user'];
             header('Location: ' . $_ENV['BASE_URL'] . 'home');
             exit;
         }
