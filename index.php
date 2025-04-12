@@ -1,12 +1,10 @@
 <?php
 
 
-
-
-
 session_start();
 include 'vendor/autoload.php';
 
+use App\Controllers\AuthController;
 use App\Controllers\HomeController;
 use App\Middlewares\AuthMiddleware;
 use Bramus\Router\Router;
@@ -16,8 +14,8 @@ use App\Controllers\CartController;
 use App\Controllers\CategoryController;
 use App\Controllers\ClientController;
 use App\Controllers\ProductController;
+use App\Controllers\StatisticController;
 use App\Controllers\UserController;
-use App\Controllers\AuthController;
 
 
 $dotenv = Dotenv::createImmutable(__DIR__);
@@ -73,6 +71,8 @@ $router->mount('/admin', function () use ($router) {
         $router->match('GET|POST','/edit/(\d+)',BillController::class . '@edit');
     });
 
+
+    $router->match('GET|POST','/statistic',StatisticController::class . '@statistic');
 
 });
 
