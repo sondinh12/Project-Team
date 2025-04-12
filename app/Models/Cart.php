@@ -184,19 +184,20 @@ class Cart extends Model {
     }
     
     function reduceStock($pro_id, $quantity) {
-        $this->queryBuilder
-            ->update('products')
-            ->set('quantity', 'quantity - :quantity')
-            ->where('id_pro = :id_pro')
-            ->setParameter('quantity', $quantity)
-            ->setParameter('id_pro', $pro_id);
-    
-        $this->connection->executeStatement(
-            $this->queryBuilder->getSQL(),
-            $this->queryBuilder->getParameters()
-        );
-    
-        return true;
+       $stmt = $this->queryBuilder
+    ->update('products')
+    ->set('quantity', 'quantity - :quantity')
+    ->where('id_product = :id_product')
+    ->setParameters([
+        'quantity' => $quantity,
+        'id_product' => $pro_id
+    ]);
+
+    $this->connection->executeStatement(
+        $stmt->getSQL(),
+        $stmt->getParameters()
+    );
+    return true;
     }
     
     

@@ -22,6 +22,7 @@
         </div>
 
         <input type="hidden" name="id_order" value="{{ $oldStatus['id_order'] }}">
+        {{-- <input type="hidden" name="quantity" value=""> --}}
 
         <div class="text-center">
             <button type="submit" class="btn btn-success">Cập nhật</button>

@@ -19,6 +19,16 @@ class CartController {
         $categories = $this->cartModel->getCategories();
         $totalPrice = $this->cartModel->totalPrice($id);
         $proCart = $this->cartModel->showCart($id); 
+        $filteredProCart = [];
+    $seen = [];
+    foreach ($proCart as $item) {
+        if (!in_array($item['product_id'], $seen)) {
+            $filteredProCart[] = $item;
+            $seen[] = $item['product_id'];
+        }
+        // Bỏ qua các bản ghi trùng lặp, không hợp nhất quantityCart
+    }
+    $proCart = $filteredProCart;
         Blade::render('client.cart',[
             'categories'=>$categories,
             'proCart'=>$proCart,
