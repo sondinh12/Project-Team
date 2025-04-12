@@ -13,7 +13,7 @@
                     @endforeach 
                 </div>
             </nav>
-
+<?php print_r($categories) ?>
         </div>
         <div class="col-lg-9">
             <nav class="navbar navbar-expand-lg bg-light navbar-light py-3 py-lg-0 px-0">

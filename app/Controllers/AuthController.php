@@ -16,7 +16,7 @@ class AuthController
         $this->authModel = new Auth();
     }
 
-    public function login()
+    public function auth()
     {
         $validator = new Validator();
 
@@ -45,7 +45,12 @@ class AuthController
                 header('Location: ' . $_ENV['BASE_URL'] . 'login');
                 exit;
             }
-
+            if ($this->authModel->checkStatusUser($_POST['user_name']) != 'active') {
+                $_SESSION['errors'] = ['login' => ['Tài khoản của bạn đã bị khóa.']];
+                $_SESSION['old'] = $_POST;
+                header('Location: ' . $_ENV['BASE_URL'] . 'login');
+                exit;
+            }
             $_SESSION['user'] = $user;
             header('Location: ' . $_ENV['BASE_URL'] . 'home');
             exit;

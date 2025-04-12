@@ -36,7 +36,17 @@ class Auth extends Model
         $this->connection->executeStatement($stmt->getSQL(), $stmt->getParameters());
     }
 
+    public function checkStatusUser($user_name)
+    {
+        $stmt = $this->queryBuilder
+            ->select('status')
+            ->from('users')
+            ->where('user_name = :user_name')
+            ->setParameter('user_name', $user_name)
+            ->executeQuery();
 
+        return $stmt->fetchOne();
+    }
     public function findUserByUsername($user_name)
     {
         $stmt = $this->queryBuilder

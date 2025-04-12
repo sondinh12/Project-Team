@@ -20,15 +20,14 @@ $dotenv = Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 const ROOT_PATH = __DIR__;
 $router = new Router();
-// $router->before('GET|POST', '/admin(|/.*)', function () {
-//     AuthMiddleware::checkAdmin();
-// });
+$router->before('GET|POST', '/admin(|/.*)', function () {
+    AuthMiddleware::checkAdmin();
+});
 
 $router->before('GET|POST', '/admin', function () {
     AuthMiddleware::log();
 });
-$router->match('GET|POST', '/login', AuthController::class . '@login');
-$router->match('GET|POST', '/forgotpass', AuthController::class . '@forgotpass');
+$router->match('GET|POST', '/login', AuthController::class . '@auth');
 $router->get('/logout', AuthController::class . '@logout');
 $router->mount('/admin', function () use ($router) {
     $router->get('/', HomeController::class . '@index');
