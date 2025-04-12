@@ -102,7 +102,7 @@
                             <div class="d-flex justify-content-between">
                                 <p><?=$productSelectItem['product_name']?> x <?=$productSelectItem['quantity']?></p>
                                 <input type="hidden" name="selected_pro[<?=(int)$productSelectItem['id_product']?>]" value="<?=$productSelectItem['quantity']?>">                             
-                                <input type="hidden" name="price" value="<?=number_format($productSelectItem['price'], 0, ',', '.')?>">
+                                <input type="hidden" name="price" value="<?=$productSelectItem['price']?>">
                                 <p><?=number_format($productSelectItem['price'], 0, ',', '.')?> VNĐ</p>
                             </div>
                         @endforeach
@@ -119,7 +119,7 @@
                     <div class="card-footer border-secondary bg-transparent">
                         <div class="d-flex justify-content-between mt-2">
                             <h5 class="font-weight-bold">Total</h5>
-                            <input type="hidden" name="total" value="<?=number_format($totalCheckout, 0, ',', '.')?>">
+                            <input type="hidden" name="total" value="<?=$totalCheckout?>">
                             <h5 class="font-weight-bold"><?=number_format($totalCheckout, 0, ',', '.')?> VNĐ</h5>
                         </div>
                     </div>
