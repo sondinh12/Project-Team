@@ -2,6 +2,7 @@
 namespace App\Controllers;
 use App\Common\Blade;
 use App\Models\Bill;
+use App\Models\Cart;
 class BillController {
     protected $billModel;
     public function __construct() {
@@ -31,16 +32,50 @@ class BillController {
         ]);
     }
 
-    public function edit($id_order){
-        $oldStatus = $this->billModel->getStatus($id_order);
-        if($_SERVER['REQUEST_METHOD'] === 'POST'){
+    // public function edit($id_order){
+    //     $oldStatus = $this->billModel->getStatus($id_order);
+    //     if($_SERVER['REQUEST_METHOD'] === 'POST'){
+    //         $this->billModel->edit($id_order);
+    //         header('location:' . $_ENV['BASE_URL'] . '/admin/bill');
+    //         exit;
+    //     }
+    //     Blade::render('admin.bill.edit',[
+    //         'oldStatus'=>$oldStatus
+    //     ]);
+    // }
+
+    public function edit($id_order) {
+        $oldStatus = $this->billModel->getStatus($id_order); // Lấy trạng thái cũ
+    
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $newStatus = $_POST['status'];
+    
+            // Nếu chuyển sang "Đang giao" mà trước đó không phải "Đang giao"
+            if ($oldStatus != "delivering" && $newStatus == "delivering") {
+                // Lấy danh sách sản phẩm trong đơn hàng
+                $orderDetails = $this->billModel->getOrderDetails($id_order); // Bạn cần thêm hàm này
+                echo '<pre>';
+                // Gọi model Cart để trừ số lượng
+                $cartModel = new Cart();
+                foreach ($orderDetails as $item) {
+                    $cartModel->reduceStock($item['pro_id'], $item['quantity']);
+                }
+            }
+    
+            // Cập nhật trạng thái
             $this->billModel->edit($id_order);
+    
             header('location:' . $_ENV['BASE_URL'] . '/admin/bill');
             exit;
         }
-        Blade::render('admin.bill.edit',[
-            'oldStatus'=>$oldStatus
+    
+        Blade::render('admin.bill.edit', [
+            'oldStatus' => $oldStatus,
         ]);
     }
+
+
+    
+    
 }
 ?>

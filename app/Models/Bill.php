@@ -32,5 +32,19 @@ class Bill extends Model {
         ]);
         $this->connection->executeStatement($stmt->getSQL(),$stmt->getParameters());
     }
+
+    public function getOrderDetails($id_order) {
+        $query = $this->queryBuilder
+            ->select('pro_id, quantity')
+            ->from('order_details')
+            ->where('id_order_detail = :id_order_detail')
+            ->setParameter('id_order_detail', $id_order);
+    
+        return $this->connection->fetchAllAssociative(
+            $query->getSQL(),
+            $query->getParameters()
+        );
+    }
+    
 }
 ?>

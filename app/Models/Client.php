@@ -26,9 +26,20 @@ class Client extends Model {
         return $category ? $category['category_id'] : null;
     }
 
-    public function getProductforCate($categoryId){
-        $stmt = $this->queryBuilder->select('*')->from('products')
-        ->where('category_id = :categoryId')->setParameter('categoryId',$categoryId);
+    // public function getProductforCate($categoryId){
+    //     $stmt = $this->queryBuilder->select('*')->from('products')
+    //     ->where('category_id = :categoryId')->setParameter('categoryId',$categoryId);
+    //     return $stmt->fetchAllAssociative();
+    // }
+
+    public function getProductforCate($categoryId, $currentProductId){
+        $stmt = $this->queryBuilder
+            ->select('DISTINCT *')
+            ->from('products')
+            ->where('category_id = :categoryId')
+            ->andWhere('id_product != :currentProductId')
+            ->setParameter('categoryId', $categoryId)
+            ->setParameter('currentProductId', $currentProductId);
         return $stmt->fetchAllAssociative();
     }
 

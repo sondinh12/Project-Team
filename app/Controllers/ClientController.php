@@ -11,7 +11,23 @@ class ClientController {
 
     public function index(){
         $products = $this->client->index();
-        $categories = $this->client->getCategories();   
+        $categories = $this->client->getCategories(); 
+        if (!is_array($categories) || empty($categories)) {
+            var_dump('getCategories() trả về rỗng:', $categories);
+        }
+        
+        $filteredCategories = [];
+        $seen = [];
+        foreach ($categories as $category) {
+            if (isset($category['id_category'], $category['category_name']) && !in_array($category['id_category'], $seen)) {
+                $filteredCategories[] = [
+                    'id_category' => $category['id_category'],
+                    'category_name' => $category['category_name']
+                ];
+                $seen[] = $category['id_category'];
+            }
+        }
+        $categories = $filteredCategories;  
         Blade::render('client.index',[
             'products'=>$products,
             'categories'=>$categories
@@ -24,7 +40,16 @@ class ClientController {
         $categories = $this->client->getCategories();   
         if ($detail) {
             $categoryId = $detail['category_id'];
-            $proForCate = $this->client->getProductforCate($categoryId);
+            $proForCate = $this->client->getProductforCate($categoryId,$id);
+            $filteredProForCate = [];
+        $seen = [];
+        foreach ($proForCate as $product) {
+            if (!in_array($product['id_product'], $seen)) {
+                $filteredProForCate[] = $product;
+                $seen[] = $product['id_product'];
+            }
+        }
+        $proForCate = $filteredProForCate;
         } else {
             $proForCate = [];
         }
