@@ -43,7 +43,7 @@ class CartController {
         $id_user = $_SESSION['id_user'];
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
             $this->cartModel->addtoCart($id_user);
-            echo "Thêm thành công";
+            $_SESSION['toast'] = 'Đã thêm sản phẩm vào giỏ hàng!';
             header('location: ' . $_ENV['BASE_URL'] . 'home');
             exit;
         }
@@ -60,6 +60,7 @@ class CartController {
                 }
                 if ($newQuantity > 0) {
                     $this->cartModel->updateCartQuantity($id_user, $newQuantity);
+                    $_SESSION['toast'] = 'Cập nhật số lượng sản phẩm thành công!';
                     header("location:" . $_ENV['BASE_URL'] . 'cart');
                     exit;
                 } if ($newQuantity == 0){
@@ -74,6 +75,7 @@ class CartController {
             $id_user = $_SESSION['id_user'];
             if(isset($_POST['btn_deletecart'])){
                 $this->cartModel->deleteCart($id_user);
+                $_SESSION['toast'] = 'Xóa sản phẩm thành công!';
                 header("location:" . $_ENV['BASE_URL'] . 'cart');
                 exit;
             }

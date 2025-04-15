@@ -2,6 +2,7 @@
 namespace App\Models;
 
 use App\Models\Model;
+use Exception;
 
 class Cart extends Model {
 
@@ -183,22 +184,49 @@ class Cart extends Model {
         return true;
     }
     
-    function reduceStock($pro_id, $quantity) {
-       $stmt = $this->queryBuilder
-    ->update('products')
-    ->set('quantity', 'quantity - :quantity')
-    ->where('id_product = :id_product')
-    ->setParameters([
-        'quantity' => $quantity,
-        'id_product' => $pro_id
-    ]);
+    // function reduceStock($pro_id, $quantity) {
+    //    $stmt = $this->queryBuilder
+    // ->update('products')
+    // ->set('quantity', 'quantity - :quantity')
+    // ->where('id_product = :id_product')
+    // ->setParameters([
+    //     'quantity' => $quantity,
+    //     'id_product' => $pro_id
+    // ]);
 
-    $this->connection->executeStatement(
-        $stmt->getSQL(),
-        $stmt->getParameters()
-    );
-    return true;
-    }
+    // $stmt = $this->connection->executeQuery($stmt->getSQL(), $stmt->getParameters());
+    // return true;
+    // }
+
+    //fix reduce
+    // function reduceStock($pro_id, $quantity) {
+    //     // Kiểm tra quantity hợp lệ
+    //     if (!is_numeric($quantity) || $quantity <= 0) {
+    //         throw new Exception("Số lượng không hợp lệ: $quantity");
+    //     }
+    
+    //     // Kiểm tra số lượng tồn kho hiện tại
+    //     $currentStock = $this->connection->fetchOne(
+    //         'SELECT quantity FROM products WHERE id_product = :id_product',
+    //         ['id_product' => $pro_id]
+    //     );
+    
+    //     if ($currentStock === false) {
+    //         throw new Exception("Không tìm thấy sản phẩm với id_product = $pro_id");
+    //     }
+    //     if ($currentStock < $quantity) {
+    //         throw new Exception("Số lượng tồn kho không đủ cho sản phẩm id_product = $pro_id");
+    //     }
+    
+    //     // Cập nhật số lượng
+    //     $stmt = 'UPDATE products SET quantity = quantity - :quantity WHERE id_product = :id_product';
+    //     $this->connection->executeStatement($stmt, [
+    //         'quantity' => $quantity,
+    //         'id_product' => $pro_id
+    //     ]);
+    
+    //     return true;
+    // }
     
     
     function clearCart($id_user, $pro_id) {
@@ -209,6 +237,34 @@ class Cart extends Model {
     
         return true;
     }
+
+    function reduceStock($pro_id, $quantity) {
+        if (!is_numeric($quantity) || $quantity <= 0) {
+            throw new Exception("Số lượng không hợp lệ: $quantity");
+        }
+    
+        // Lấy số lượng tồn kho
+        $currentStock = $this->connection->fetchAssociative(
+            'SELECT quantity FROM products WHERE id_product = :id_product',
+            ['id_product' => $pro_id]
+        );
+    
+        if ($currentStock === false) {
+            throw new Exception("Không tìm thấy sản phẩm với id_product = $pro_id");
+        }
+        if ($currentStock < $quantity) {
+            throw new Exception("Số lượng tồn kho không đủ cho sản phẩm id_product = $pro_id");
+        }
+    
+        // Trừ số lượng
+        $this->connection->executeStatement(
+            'UPDATE products SET quantity = quantity - :quantity WHERE id_product = :id_product',
+            ['quantity' => $quantity, 'id_product' => $pro_id]
+        );
+    
+        return true;
+    }
+    
     
 }
 ?>

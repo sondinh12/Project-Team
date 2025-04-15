@@ -19,7 +19,7 @@
  <?php echo $this->runChild('client.components.footer'); ?>
  <!-- Footer End -->
 
-
+ <?php echo $this->yieldContent('popup'); ?>
  <?php /* script */ ?>
  <?php echo $this->runChild('client.components.script'); ?>
  <?php echo $this->yieldContent('script'); ?>

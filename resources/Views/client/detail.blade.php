@@ -12,7 +12,7 @@
                 <div class="col-lg-5 pb-5">
                     <div id="product-carousel" class="carousel slide" data-ride="carousel">
                         <div class="carousel-inner border">
-                            <div class="carousel-item">
+                            <div >
                                 <img class="w-100 h-100" src="<?=$_ENV['BASE_URL'] . $detail['product_img']?>" alt="Image">
                             </div>
                         </div>
@@ -214,7 +214,7 @@
                                 <img class="img-fluid w-100" src="<?=$_ENV['BASE_URL'] . $proCate['product_img']?>" alt="">
                             </div>
                             <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
-                                <h6 class="text-truncate mb-3">{{$proCate['product_name']}}</h6>
+                                <a href="<?=$_ENV['BASE_URL'] . 'detail/'.$proCate['id_product']?>"><h6 class="text-truncate mb-3">{{$proCate['product_name']}}</h6></a>
                                 <div class="d-flex justify-content-center">
                                     <h6>{{$proCate['price']}}</h6>
                                 </div>

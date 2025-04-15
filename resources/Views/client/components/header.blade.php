@@ -7,7 +7,8 @@
 
     <!-- Favicon -->
     <link href="img/favicon.ico" rel="icon">
-
+    {{-- CSS --}}
+    <link rel="stylesheet" href="<?=$_ENV['BASE_URL']?>resources/Views/client/assets/css/popup.css">
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet"> 

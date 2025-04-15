@@ -19,7 +19,7 @@
     @include('client.components.footer')
     <!-- Footer End -->
 
-
+    @yield('popup')
     {{-- script --}}
     @include('client.components.script')
     @yield('script')

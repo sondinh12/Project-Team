@@ -3,6 +3,14 @@
 @section('title','Trang chủ')
 
 @section('content')
+@if (!empty($_SESSION['toast']))
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            showPopup();
+        });
+    </script>
+    <?php unset($_SESSION['toast']); ?>
+@endif
 <!-- Featured Start -->
 <div class="container-fluid pt-5">
     <div class="row px-xl-5 pb-3">
@@ -209,4 +217,40 @@
 </div> --}}
 <!-- Products End -->
 
+@endsection
+
+@section('popup')
+    <div id="custom-popup" style="
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: white;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 0 20px rgba(0,0,0,0.3);
+        z-index: 99999;
+        display: none;
+        text-align: center;
+        animation: popup-fadein 0.3s ease;
+    ">
+        <div class="checkmark-circle">
+            <div class="background"></div>
+            <div class="checkmark draw"></div>
+        </div>
+        <p style="margin-top: 10px; font-weight: bold;">Thêm sản phẩm vào giỏ hàng thành công!</p>
+    </div>
+@endsection
+
+@section('script')
+<script>
+    function showPopup() {
+    const popup = document.getElementById('custom-popup');
+    popup.style.display = 'block';
+
+    setTimeout(() => {
+        popup.style.display = 'none';
+    }, 2000);
+}
+</script>
 @endsection
