@@ -57,13 +57,93 @@ class Client extends Model
         return $stmt->fetchAllAssociative();
     }
 
-    public function login()
+    public function getUser($id_user)
     {
-        $stmt = $this->queryBuilder->select('*')->from('users')->where('user_name = :user_name AND password = :password')
-            ->setParameters([
-                'user_name' => $_POST['user_name'],
-                'password' => $_POST['password']
-            ]);
+        $stmt = $this->queryBuilder->select('*')->from('users')->where('users.id_user = :id_user')
+            ->setParameter('id_user', $id_user);
         return $stmt->fetchAssociative();
+    }
+    public function getBill($id_user)
+    {
+        $stmt = $this->queryBuilder
+            ->select('*')
+            ->from('orders')
+            ->where('orders.id_user = :id_user')
+            ->orderBy('orders.created_at', 'DESC')
+            ->setParameter('id_user', $id_user);
+
+        return $stmt->fetchAllAssociative();
+    }
+    public function updateUserInfo($userId, $phone, $address, $password, $image)
+    {
+        $data = [];
+
+        if ($phone) {
+            $data['phone'] = $phone;
+        }
+        if ($address) {
+            $data['address'] = $address;
+        }
+        if ($password) {
+            $data['password'] = password_hash($password, PASSWORD_BCRYPT);
+        }
+        if ($image) {
+            $data['user_img'] = $image;
+        }
+
+        if (!empty($data)) {
+            $stmt = $this->queryBuilder
+                ->update('users');
+
+            // Gọi set từng cặp key => :param
+            foreach ($data as $column => $value) {
+                $stmt->set($column, ':' . $column);
+            }
+
+            $stmt->where('id_user = :id_user');
+            $stmt->setParameter('id_user', $userId);
+
+            // Gán giá trị cho mỗi tham số
+            foreach ($data as $column => $value) {
+                $stmt->setParameter($column, $value);
+            }
+
+            $stmt->executeStatement();
+        }
+    }
+
+
+    public function find($id_order)
+    {
+        $stmt = $this->queryBuilder
+            ->select('*')
+            ->from('orders')
+            ->where('id_order = :id_order')
+            ->setParameter('id_order', $id_order);
+
+        return $stmt->executeQuery()->fetchAssociative();
+    }
+
+    public function getItems($id_order)
+    {
+        $stmt = $this->queryBuilder
+            ->select('od.*, p.product_name AS product_name', 'p.price AS product_price')
+            ->from('order_details', 'od')
+            ->innerJoin('od', 'products', 'p', 'od.pro_id = p.id_product')
+            ->where('od.order_id = :id_order')
+            ->setParameter('id_order', $id_order);
+
+        return $stmt->executeQuery()->fetchAllAssociative();
+    }
+    public function cancelorder($id_order)
+    {
+        $stmt = $this->queryBuilder
+            ->update('orders')
+            ->set('status', ':status')
+            ->where('id_order = :id_order')
+            ->setParameter('status', 'cancelled')
+            ->setParameter('id_order', $id_order);
+
+        return $stmt->executeStatement();
     }
 }

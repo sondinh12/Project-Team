@@ -24,9 +24,9 @@ $router->before('GET|POST', '/admin(|/.*)', function () {
     AuthMiddleware::checkAdmin();
 });
 
-$router->before('GET|POST', '/admin', function () {
-    AuthMiddleware::log();
-});
+// $router->before('GET|POST', '/admin', function () {
+//     AuthMiddleware::log();
+// });
 $router->match('GET|POST', '/login', AuthController::class . '@auth');
 $router->get('/logout', AuthController::class . '@logout');
 $router->mount('/admin', function () use ($router) {
@@ -61,6 +61,7 @@ $router->mount('', function () use ($router) {
         exit();
     });
     $router->get('/home', ClientController::class . '@index');
+    $router->match('GET|POST', '/info/(\d+)', ClientController::class . '@info');
     $router->get('/detail/(\d+)', ClientController::class . '@detail');
     $router->get('/cart', CartController::class . '@cart');
     $router->post('/cart/addToCart', CartController::class . '@addtoCart');

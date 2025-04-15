@@ -131,29 +131,29 @@
         <h2 class="section-title px-5"><span class="px-2">Trandy Products</span></h2>
     </div>
     <div class="row px-xl-5 pb-3">
-        @foreach ($products as $product)
-            <form action="<?=$_ENV['BASE_URL'] . 'cart/addToCart'?>" method="post">
-                <div class="col-lg-3 col-md-6 col-sm-12 pb-1">       
-                    <div class="card product-item border-0 mb-4">
-                        <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
-                            <img class="img-fluid fixed-size" src="<?=$_ENV['BASE_URL'] . $product['product_img']?>" alt="Ảnh sản phẩm">
-                        </div>
-                        <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
-                            <a href="<?=$_ENV['BASE_URL'] . 'detail/' . $product['id_product']?>" class="text_decoration"><h6 class="text-truncate mb-3">{{$product['product_name']}}</h6></a>
-                            <div class="d-flex justify-content-center">
-                                <h6>{{$product['price']}}đ</h6>
+        @foreach ($products as $product)    
+                <div class="col-lg-3 col-md-6 col-sm-12 pb-1">   
+                    <form action="<?=$_ENV['BASE_URL'] . 'cart/addToCart'?>" method="post">    
+                        <div class="card product-item border-0 mb-4">
+                            <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
+                                <img class="img-fluid fixed-size" src="<?=$_ENV['BASE_URL'] . $product['product_img']?>" alt="Ảnh sản phẩm">
+                            </div>
+                            <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
+                                <a href="<?=$_ENV['BASE_URL'] . 'detail/' . $product['id_product']?>" class="text_decoration"><h6 class="text-truncate mb-3">{{$product['product_name']}}</h6></a>
+                                <div class="d-flex justify-content-center">
+                                    <h6>{{$product['price']}}đ</h6>
+                                </div>
+                            </div>
+                            <div class="card-footer d-flex justify-content-between bg-light border">
+                                <a href="<?=$_ENV['BASE_URL'] . 'detail/' . $product['id_product']?>" class="btn btn-sm text-dark p-0"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a>    
+                                    <input type="hidden" value="{{$product['id_product']}}" name="product_id">
+                                    <input type="hidden" name="quantity" value="1">
+                                    <input type="hidden" name="btn_updatecart" value="<?=$product['id_product']?>">
+                                    <button type="submit" class="btn btn-sm text-dark p-0" ><i class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart</button>
                             </div>
                         </div>
-                        <div class="card-footer d-flex justify-content-between bg-light border">
-                            <a href="<?=$_ENV['BASE_URL'] . 'detail/' . $product['id_product']?>" class="btn btn-sm text-dark p-0"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a>    
-                                <input type="hidden" value="{{$product['id_product']}}" name="product_id">
-                                <input type="hidden" name="quantity" value="1">
-                                <input type="hidden" name="btn_updatecart" value="<?=$product['id_product']?>">
-                                <button type="submit" class="btn btn-sm text-dark p-0" ><i class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart</button>
-                        </div>
-                    </div>
+                    </form>
                 </div>
-            </form>
         @endforeach
     </div>
 </div>
@@ -183,7 +183,7 @@
 
 
 <!-- Products Start -->
-<div class="container-fluid pt-5">
+{{-- <div class="container-fluid pt-5">
     <div class="text-center mb-4">
         <h2 class="section-title px-5"><span class="px-2">Just Arrived</span></h2>
     </div>
@@ -206,7 +206,7 @@
             </div>
         </div>
     </div>
-</div>
+</div> --}}
 <!-- Products End -->
 
 @endsection
