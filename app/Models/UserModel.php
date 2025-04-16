@@ -6,6 +6,13 @@ use App\Models\Model;
 
 class UserModel extends Model
 {
+    public function searchByName($username)
+    {
+        return $this->queryBuilder->select('*')->from('users')
+            ->where('user_name LIKE :user_name')
+            ->setParameter('user_name', '%' . $username . '%')
+            ->orderBy('id_user', 'DESC')->fetchAllAssociative();
+    }
     public function index()
     {
         return $this->queryBuilder->select('*')->from('users')

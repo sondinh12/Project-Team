@@ -52,6 +52,8 @@ class AuthController
                 exit;
             }
             $_SESSION['user'] = $user;
+            $_SESSION['success'] = 'Đăng nhập thành công.';
+
             header('Location: ' . $_ENV['BASE_URL'] . 'home');
             exit;
         }
@@ -98,6 +100,7 @@ class AuthController
 
             $this->authModel->registerUser();
             $_SESSION['user'] = $this->authModel->findUserByUsername($_POST['user_name']);
+            $_SESSION['success'] = 'Đăng ký thành công.';
             header('Location: ' . $_ENV['BASE_URL'] . 'home');
             exit;
         }
@@ -208,7 +211,7 @@ class AuthController
         }
 
         // Hiển thị giao diện login với các dữ liệu session
-        Blade::render('auth.login', [
+        Blade::render('auth.auth', [
             'errors' => $_SESSION['errors'] ?? [],
             'old' => $_SESSION['old'] ?? [],
             'active_form' => $_SESSION['active_form'] ?? 'login',
@@ -223,7 +226,9 @@ class AuthController
     public function logout()
     {
         unset($_SESSION['user']);
+        $_SESSION['success'] = 'Đăng xuất thành công.';
         header('Location: ' . $_ENV['BASE_URL'] . 'home');
+
         exit;
     }
 }

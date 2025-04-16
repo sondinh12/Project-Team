@@ -356,9 +356,9 @@
         </ul>
         <p><strong>Tổng tiền:</strong> {{ number_format($orderDetail['total']) }}₫</strong></p>
         @if ($orderDetail['status'] === 'pending')
-            <form action="<?=$_ENV['BASE_URL'] . 'info/' .$user['id_user']?>" method="POST">
+            <form action="<?=$_ENV['BASE_URL'] . 'info/' .$user['id_user']?>" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn hủy đơn hàng này không?');">
                 <input type="hidden" name="id_order" value="{{ $orderDetail['id_order'] }}">
-                <button type="submit" class="btn btn-danger" name="btn_cancel">Hủy đơn hàng</button>
+                <button type="submit" class="btn btn-danger" name="btn_cancel"  >Hủy đơn hàng</button>
             </form>
         @endif
     </div>

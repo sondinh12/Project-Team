@@ -3,7 +3,6 @@
 @section('title','Thêm tài khoản')
 
 @section('content')
-<div class="container mt-4" >
     <div class="card shadow-lg p-4" style="margin-bottom:50px" >
         <h3 class="text-center">Thêm tài khoản</h3>
         <form action="<?= $_ENV['BASE_URL'] . 'admin/users/create' ?>" enctype="multipart/form-data" method="post" class="needs-validation">

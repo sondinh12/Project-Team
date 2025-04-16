@@ -43,8 +43,16 @@ class UserController
     }
     public function index()
     {
-        $users = $this->UserModel->index();
-        return Blade::render('admin.users.index', compact('users'));
+        $username = $_GET['username'] ?? '';
+        if (!empty($username)) {
+            $user = $this->UserModel->searchByName($username);
+        } else {
+            $user = $this->UserModel->index();
+        }
+        return Blade::render('admin.users.index', [
+            'users' => $user,
+            'keyword' => $username
+        ]);
     }
     public function create()
     {
@@ -83,6 +91,7 @@ class UserController
 
             $this->UserModel->create($imageName);
             $_SESSION['message'] = "Thêm tài khoản thành công";
+
             header('location:' . $_ENV['BASE_URL'] . 'admin/users');
             exit;
         }
@@ -147,8 +156,10 @@ class UserController
         $user = $this->UserModel->FindUserByID($id);
         if ($user['status'] == 'active') {
             $this->UserModel->changeStatus($id, 'inactive');
+            $_SESSION['message'] = 'Ban tài khoản thành công.';
         } else {
             $this->UserModel->changeStatus($id, 'active');
+            $_SESSION['message'] = 'Mở tài khoản thành công.';
         }
         header('location: ' . $_ENV['BASE_URL'] . 'admin/users');
         exit;
