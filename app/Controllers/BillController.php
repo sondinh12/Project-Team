@@ -130,15 +130,15 @@ class BillController {
     public function edit($id_order) {
         $id_order = (int) $id_order;
         $oldStatus = $this->billModel->getStatus($id_order);
-
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $newStatus = $_POST['status'];
-
-            // Gọi hàm mới để xử lý trừ số lượng
+            // var_dump(debug_backtrace());
+            // Gọi hàm mới để xử lý trừ số lượng    
             $cartModel = new Cart();
             $this->billModel->handleStockOnDeliveryStatusChange($id_order, $oldStatus, $newStatus, $cartModel);
 
             // Cập nhật trạng thái đơn hàng
+            // file_put_contents('log.txt', "Edit called for order_id = $id_order\n", FILE_APPEND);
             $this->billModel->edit($id_order);
 
             header('location:' . $_ENV['BASE_URL'] . '/admin/bill');

@@ -63,7 +63,7 @@ class Bill extends Model {
             ->where('order_id = :order_id')
             ->setParameter('order_id', $id_order);
         
-        return $this->connection->fetchAllAssociative($query->getSQL(), $query->getParameters());
+        return $this->connection->fetchAllAssociative($query->getSQL(), $query->getParameters());   
     }
 
     private function removeDuplicateOrderDetails($order_id) {
