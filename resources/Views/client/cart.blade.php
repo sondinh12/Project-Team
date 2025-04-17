@@ -74,12 +74,6 @@
                                 </tr>
                             @endforeach
                         </tbody>
-                        <tfoot>
-                            <tr>
-                                <td><strong>Tổng tiền</strong></td>
-                                <td colspan="4"><strong><?= number_format($totalPrice, 0, ',', '.') ?> VNĐ</strong></td>  
-                            </tr>
-                        </tfoot>
                     </table>
                 </div>
             <div class="col-lg-4">

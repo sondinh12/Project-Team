@@ -119,6 +119,7 @@ class Bill extends Model {
             $this->removeDuplicateOrderDetails($id_order);
 
             // Lấy chi tiết đơn hàng
+            // $orderDetails = $this->getOrderDetails($id_order);
             $orderDetails = $this->getOrderDetails($id_order);
 
             if (empty($orderDetails)) {
