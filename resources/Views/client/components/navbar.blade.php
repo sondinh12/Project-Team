@@ -13,7 +13,6 @@
                     @endforeach 
                 </div>
             </nav>
-
         </div>
         <div class="col-lg-9">
             <nav class="navbar navbar-expand-lg bg-light navbar-light py-3 py-lg-0 px-0">
@@ -37,8 +36,15 @@
                         <a href="contact.html" class="nav-item nav-link">Contact</a>
                     </div>
                     <div class="navbar-nav ml-auto py-0">
-                        <a href="<?=$_ENV['BASE_URL'] . 'login'?>" class="nav-item nav-link">Login</a>
-                        <a href="" class="nav-item nav-link">Register</a>
+                        @if(isset($_SESSION['user']))
+                            <a href="<?=$_ENV['BASE_URL'] . 'info/'.  $_SESSION['user']['id_user']?>" class="nav-item nav-link">Thông tin tài khoản</a>
+                            @if($_SESSION['user']['role'] === 'admin')
+                                <a href="<?=$_ENV['BASE_URL'] . 'admin'?>" class="nav-item nav-link">Trang quản trị</a>
+                            @endif
+                            <a href="<?=$_ENV['BASE_URL'] . 'logout'?>" class="nav-item nav-link">Đăng xuất</a>
+                        @else
+                            <a href="<?=$_ENV['BASE_URL'] . 'login'?>" class="nav-item nav-link">Đăng nhập</a>
+                        @endif
                     </div>
                 </div>
             </nav>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+ <?php echo $this->runChild('client.components.header'); ?>
+<body>
+ <!-- Topbar Start -->
+ <?php echo $this->runChild('client.components.topbar'); ?>
+ <!-- Topbar End -->
+
+
+ <!-- Navbar Start -->
+ <?php echo $this->runChild('client.components.navbar'); ?>
+ <!-- Navbar End -->
+
+
+ <?php echo $this->yieldContent('content'); ?>
+
+
+ <!-- Footer Start -->
+ <?php echo $this->runChild('client.components.footer'); ?>
+ <!-- Footer End -->
+
+
+ <?php /* script */ ?>
+ <?php echo $this->runChild('client.components.script'); ?>
+</body>
+
+</html>

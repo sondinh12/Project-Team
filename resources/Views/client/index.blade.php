@@ -187,6 +187,7 @@
         </div>
     </div>
 </div>
+
 <!-- Subscribe End -->
 
 
@@ -211,10 +212,33 @@
                     <a href="" class="btn btn-sm text-dark p-0"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a>
                     <a href="" class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart</a>
                 </div>
+                 --}}
+@if(isset($_SESSION['success']))
+        <div id="custom-popup" style="
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+            z-index: 99999;
+            text-align: center;
+            animation: popup-fadein 0.3s ease;
+        ">
+            <div class="checkmark-circle">
+                <div class="background"></div>
+                <div class="checkmark draw"></div>
             </div>
+            <p id="popup-message" style="margin-top: 15px; font-weight: bold;">
+                {{ $_SESSION['success'] }}
+            </p>
         </div>
     </div>
-</div> --}}
+</div>
+@unset($_SESSION['success'])
+    @endif
 <!-- Products End -->
 
 @endsection
@@ -253,4 +277,13 @@
     }, 2000);
 }
 </script>
+
+        
+    <script>
+       setTimeout(() => {
+            const popup = document.getElementById('custom-popup');
+            if (popup) popup.style.display = 'none';
+        }, 3000);
+    </script>
+
 @endsection

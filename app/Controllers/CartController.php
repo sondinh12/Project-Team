@@ -11,10 +11,10 @@ class CartController {
     }
     
     public function cart(){
-        if(!isset($_SESSION['id_user'])){
+        if(!isset($_SESSION['user']['id_user'])){
             header('location: ' . $_ENV['BASE_URL'] . 'login');
         }
-        $id = $_SESSION['id_user'];
+        $id = $_SESSION['user']['id_user'];
         // var_dump($id);
         $categories = $this->cartModel->getCategories();
         $totalPrice = $this->cartModel->totalPrice($id);
@@ -37,10 +37,10 @@ class CartController {
     }
 
     public function addToCart(){
-        if(!isset($_SESSION['id_user'])){
+        if(!isset($_SESSION['user']['id_user'])){
             header('location: ' . $_ENV['BASE_URL'] . 'login');
         }
-        $id_user = $_SESSION['id_user'];
+        $id_user = $_SESSION['user']['id_user'];
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
             $this->cartModel->addtoCart($id_user);
             $_SESSION['toast'] = 'Đã thêm sản phẩm vào giỏ hàng!';
@@ -50,8 +50,8 @@ class CartController {
     }
 
     public function updateCartQuantityPro(){
-        if(isset($_SESSION['id_user'])){
-            $id_user = $_SESSION['id_user'];
+        if(isset($_SESSION['user']['id_user'])){
+            $id_user = $_SESSION['user']['id_user'];
             if(isset($_POST['btn_updatecart'])){
                 $quantityField = 'quantity-'.$_POST['btn_updatecart'];
                 $newQuantity = isset($_POST[$quantityField]) ? $_POST[$quantityField] : 1;
@@ -71,8 +71,8 @@ class CartController {
     }
 
     public function deleteCart(){
-        if(isset($_SESSION['id_user'])){
-            $id_user = $_SESSION['id_user'];
+        if(isset($_SESSION['user']['id_user'])){
+            $id_user = $_SESSION['user']['id_user'];
             if(isset($_POST['btn_deletecart'])){
                 $this->cartModel->deleteCart($id_user);
                 $_SESSION['toast'] = 'Xóa sản phẩm thành công!';
@@ -104,7 +104,7 @@ class CartController {
         // }
 
         if(isset($_POST['btn_checkout'])){
-            $id_user = $_SESSION['id_user'];
+            $id_user = $_SESSION['user']['id_user'];
             $info = $this->cartModel->getAllInfoUser($id_user);
             $selectedPro = $_POST['selected_pro'] ?? [];
 
@@ -134,11 +134,11 @@ class CartController {
 
     function placeOrder()
 {
-    if (!isset($_SESSION['id_user']) || !isset($_POST['btn_placeorder'])) {
+    if (!isset($_SESSION['user']['id_user']) || !isset($_POST['btn_placeorder'])) {
         return;
     }
-    if(isset($_SESSION['id_user']) && isset($_POST['btn_placeorder'])){
-        $id_user = $_SESSION['id_user'];
+    if(isset($_SESSION['user']['id_user']) && isset($_POST['btn_placeorder'])){
+        $id_user = $_SESSION['user']['id_user'];
         $selectedPro = $_POST['selected_pro'] ?? [];
 
 

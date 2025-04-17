@@ -5,12 +5,33 @@
 @section('title','Danh sách danh mục')
 
 @section('content')
-@php
-    if(isset($_SESSION['message'])){
-        echo $_SESSION['message'];
-        unset($_SESSION['message']);
+<style>
+    .custom-message {
+        padding: 12px 20px;
+        background-color: #e6ffed;
+        color: #2d7a36;
+        border: 1px solid #a1e1af;
+        border-radius: 6px;
+        font-size: 16px;
+        margin-bottom: 20px;
+        animation: fadeIn 0.3s ease;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     }
+    
+    /* Optional: fade-in animation */
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-5px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    </style>
+@php
+if (isset($_SESSION['message'])) {
+    echo "<div class='custom-message'>" . $_SESSION['message'] . "</div>";
+    unset($_SESSION['message']);
+}
+@endphp
 
+@php
     if(isset($_SESSION['error'])){
         echo $_SESSION['error'];
         unset($_SESSION['error']);
