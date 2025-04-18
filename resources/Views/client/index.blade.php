@@ -243,28 +243,30 @@
 
 @endsection
 
-@section('popup')
-    <div id="custom-popup" style="
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background-color: white;
-        padding: 30px;
-        border-radius: 12px;
-        box-shadow: 0 0 20px rgba(0,0,0,0.3);
-        z-index: 99999;
-        display: none;
-        text-align: center;
-        animation: popup-fadein 0.3s ease;
-    ">
-        <div class="checkmark-circle">
-            <div class="background"></div>
-            <div class="checkmark draw"></div>
-        </div>
-        <p style="margin-top: 10px; font-weight: bold;">Thêm sản phẩm vào giỏ hàng thành công!</p>
-    </div>
-@endsection
+@if(isset($_SESSION['error']))
+<div style="
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 16px 24px;
+    background-color: #ffe0e0;
+    color: #d8000c;
+    border: 1px solid #d8000c;
+    border-radius: 8px;
+    font-weight: 600;
+    z-index: 9999;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+">
+    {{ $_SESSION['error'] }}
+</div>
+@unset($_SESSION['error'])
+<script>
+    setTimeout(function() {
+        document.querySelector('div').style.display = 'none';
+    }, 3000);
+</script>
+@endif
 
 @section('script')
 <script>

@@ -92,4 +92,15 @@ class UserModel extends Model
             ]);
         $this->connection->executeStatement($stmt->getSQL(), $stmt->getParameters());
     }
+    public function changerole($id, $newRole)
+    {
+        $stmt = $this->queryBuilder->update('users')
+            ->set('role', ':role')
+            ->where('id_user = :id_user')
+            ->setParameters([
+                'id_user' => $id,
+                'role' => $newRole
+            ]);
+        $this->connection->executeStatement($stmt->getSQL(), $stmt->getParameters());
+    }
 }

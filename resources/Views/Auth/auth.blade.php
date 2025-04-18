@@ -199,5 +199,6 @@
 <!-- JavaScript -->
 <script src="./resources/Views/Auth/assets/js/script.js"></script>
 
+
 </body>
 </html>

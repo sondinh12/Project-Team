@@ -74,12 +74,16 @@ if (isset($_SESSION['message'])) {
                         <td>{{$user['created_at']}}</td>
                         <td>{{$user['updated_at']}}</td>
                         <td>
-                            @if ($user['status'] == 'active')
-                                <a href="<?= $_ENV['BASE_URL'] . 'admin/users/changestatus/' . $user['id_user'] ?>" class="btn btn-sm btn-danger" onclick="return confirm('Bạn muốn ban chứ?')">Ban</a>
-                            @else 
-                                <a href="<?= $_ENV['BASE_URL'] . 'admin/users/changestatus/' . $user['id_user'] ?>" class="btn btn-sm btn-success" onclick="return confirm('Bạn muốn mở ban chứ?')">Mở</a>
+                            @if ($user['role'] !== 'admin')
+                                @if ($user['status'] == 'active')
+                                    <a href="<?= $_ENV['BASE_URL'] . 'admin/users/changestatus/' . $user['id_user'] ?>" class="btn btn-sm btn-danger" onclick="return confirm('Bạn muốn ban chứ?')">Ban</a>
+                                @else 
+                                    <a href="<?= $_ENV['BASE_URL'] . 'admin/users/changestatus/' . $user['id_user'] ?>" class="btn btn-sm btn-success" onclick="return confirm('Bạn muốn mở ban chứ?')">Mở</a>
+                                @endif
+                                <a href="<?= $_ENV['BASE_URL'] . 'admin/users/update/' . $user['id_user'] ?>" class="btn btn-sm btn-primary">Sửa</a>
+                            @else
+                                <a href="<?= $_ENV['BASE_URL'] . 'admin/users/changerole/' . $user['id_user'] ?>" class="btn btn-sm btn-danger" onclick="return confirm('Bạn muốn hạ cấp chứ?')">Hạ cấp</a>
                             @endif
-                            <a href="<?= $_ENV['BASE_URL'] . 'admin/users/update/' . $user['id_user'] ?>" class="btn btn-sm btn-primary">Sửa</a>
                         </td>
                     </tr>
                 @endforeach
