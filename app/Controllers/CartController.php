@@ -1,47 +1,53 @@
 <?php
+
 namespace App\Controllers;
+
 use App\Common\Blade;
 use App\Models\Cart;
-use App\Models\Category; 
+use App\Models\Category;
 
-class CartController {
+class CartController
+{
     protected $cartModel;
-    public function __construct() {
+    public function __construct()
+    {
         $this->cartModel = new Cart();
     }
-    
-    public function cart(){
-        if(!isset($_SESSION['user']['id_user'])){
+
+    public function cart()
+    {
+        if (!isset($_SESSION['user']['id_user'])) {
             header('location: ' . $_ENV['BASE_URL'] . 'login');
         }
         $id = $_SESSION['user']['id_user'];
         // var_dump($id);
         $categories = $this->cartModel->getCategories();
         $totalPrice = $this->cartModel->totalPrice($id);
-        $proCart = $this->cartModel->showCart($id); 
+        $proCart = $this->cartModel->showCart($id);
         $filteredProCart = [];
-    $seen = [];
-    foreach ($proCart as $item) {
-        if (!in_array($item['product_id'], $seen)) {
-            $filteredProCart[] = $item;
-            $seen[] = $item['product_id'];
+        $seen = [];
+        foreach ($proCart as $item) {
+            if (!in_array($item['product_id'], $seen)) {
+                $filteredProCart[] = $item;
+                $seen[] = $item['product_id'];
+            }
+            // Bỏ qua các bản ghi trùng lặp, không hợp nhất quantityCart
         }
-        // Bỏ qua các bản ghi trùng lặp, không hợp nhất quantityCart
-    }
-    $proCart = $filteredProCart;
-        Blade::render('client.cart',[
-            'categories'=>$categories,
-            'proCart'=>$proCart,
-            'totalPrice'=>$totalPrice
+        $proCart = $filteredProCart;
+        Blade::render('client.cart', [
+            'categories' => $categories,
+            'proCart' => $proCart,
+            'totalPrice' => $totalPrice
         ]);
     }
 
-    public function addToCart(){
-        if(!isset($_SESSION['user']['id_user'])){
+    public function addToCart()
+    {
+        if (!isset($_SESSION['user']['id_user'])) {
             header('location: ' . $_ENV['BASE_URL'] . 'login');
         }
         $id_user = $_SESSION['user']['id_user'];
-        if($_SERVER['REQUEST_METHOD'] === 'POST'){
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $this->cartModel->addtoCart($id_user);
             $_SESSION['toast'] = 'Đã thêm sản phẩm vào giỏ hàng!';
             header('location: ' . $_ENV['BASE_URL'] . 'home');
@@ -49,11 +55,12 @@ class CartController {
         }
     }
 
-    public function updateCartQuantityPro(){
-        if(isset($_SESSION['user']['id_user'])){
+    public function updateCartQuantityPro()
+    {
+        if (isset($_SESSION['user']['id_user'])) {
             $id_user = $_SESSION['user']['id_user'];
-            if(isset($_POST['btn_updatecart'])){
-                $quantityField = 'quantity-'.$_POST['btn_updatecart'];
+            if (isset($_POST['btn_updatecart'])) {
+                $quantityField = 'quantity-' . $_POST['btn_updatecart'];
                 $newQuantity = isset($_POST[$quantityField]) ? $_POST[$quantityField] : 1;
                 if (empty($newQuantity) || $newQuantity <= 0) {
                     $newQuantity = 1;
@@ -63,17 +70,19 @@ class CartController {
                     $_SESSION['toast'] = 'Cập nhật số lượng sản phẩm thành công!';
                     header("location:" . $_ENV['BASE_URL'] . 'cart');
                     exit;
-                } if ($newQuantity == 0){
+                }
+                if ($newQuantity == 0) {
                     echo "Lỗi";
                 }
             }
         }
     }
 
-    public function deleteCart(){
-        if(isset($_SESSION['user']['id_user'])){
+    public function deleteCart()
+    {
+        if (isset($_SESSION['user']['id_user'])) {
             $id_user = $_SESSION['user']['id_user'];
-            if(isset($_POST['btn_deletecart'])){
+            if (isset($_POST['btn_deletecart'])) {
                 $this->cartModel->deleteCart($id_user);
                 $_SESSION['toast'] = 'Xóa sản phẩm thành công!';
                 header("location:" . $_ENV['BASE_URL'] . 'cart');
@@ -82,20 +91,20 @@ class CartController {
         }
     }
 
-    public function handleAction(){
-        if($_SERVER['REQUEST_METHOD'] === 'POST'){
-            if(isset($_POST['btn_updatecart'])){
+    public function handleAction()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if (isset($_POST['btn_updatecart'])) {
                 $this->updateCartQuantityPro();
-            }elseif (isset($_POST['btn_deletecart'])) {
+            } elseif (isset($_POST['btn_deletecart'])) {
                 $this->deleteCart();
-            } else if(isset($_POST['btn_checkout'])){
+            } else if (isset($_POST['btn_checkout'])) {
                 $this->checkoutPro();
-                
             }
         }
-    } 
-    
-    
+    }
+
+
     //order
     function checkoutPro()
     {
@@ -103,13 +112,16 @@ class CartController {
         //     return;
         // }
 
-        if(isset($_POST['btn_checkout'])){
+        if (isset($_POST['btn_checkout'])) {
             $id_user = $_SESSION['user']['id_user'];
             $info = $this->cartModel->getAllInfoUser($id_user);
             $selectedPro = $_POST['selected_pro'] ?? [];
 
             if (empty($selectedPro)) {
-                echo "Vui lòng chọn sản phẩm để thanh toán";
+                // echo "Vui lòng chọn sản phẩm để thanh toán";
+                $_SESSION['toast'] = 'Vui lòng chọn sản phẩm để thanh toán';
+                header("location:" . $_ENV['BASE_URL'] . 'cart');
+
                 return;
             }
 
@@ -128,43 +140,41 @@ class CartController {
                 'info' => $info,
             ]);
         }
-        
     }
 
 
     function placeOrder()
-{
-    if (!isset($_SESSION['user']['id_user']) || !isset($_POST['btn_placeorder'])) {
-        return;
-    }
-    if(isset($_SESSION['user']['id_user']) && isset($_POST['btn_placeorder'])){
-        $id_user = $_SESSION['user']['id_user'];
-        $selectedPro = $_POST['selected_pro'] ?? [];
+    {
+        if (!isset($_SESSION['user']['id_user']) || !isset($_POST['btn_placeorder'])) {
+            return;
+        }
+        if (isset($_SESSION['user']['id_user']) && isset($_POST['btn_placeorder'])) {
+            $id_user = $_SESSION['user']['id_user'];
+            $selectedPro = $_POST['selected_pro'] ?? [];
 
 
-        $id_orders = $this->cartModel->createOrders($id_user);
-        $cartItems = $this->cartModel->getCartByIdUser($id_user);
+            $id_orders = $this->cartModel->createOrders($id_user);
+            $cartItems = $this->cartModel->getCartByIdUser($id_user);
 
-        foreach ($cartItems as $item) {
-            $pro_id = (int)$item['product_id'];
+            foreach ($cartItems as $item) {
+                $pro_id = (int)$item['product_id'];
 
-            // Nếu sản phẩm không nằm trong danh sách được chọn -> bỏ qua
-            if (!isset($selectedPro[$pro_id])) {
-                continue;
+                // Nếu sản phẩm không nằm trong danh sách được chọn -> bỏ qua
+                if (!isset($selectedPro[$pro_id])) {
+                    continue;
+                }
+
+                $quantity = $selectedPro[$pro_id];
+                $product_price = $item['price'];
+
+                $this->cartModel->addOrdersDetail($id_orders, $pro_id, $product_price, $quantity);
+                // $this->cartModel->reduceStock($pro_id, $quantity);
+                $_SESSION['success'] = 'Đặt hàng thành công!';
+                $this->cartModel->clearCart($id_user, $pro_id);
             }
 
-            $quantity = $selectedPro[$pro_id];
-            $product_price = $item['price'];
-
-            $this->cartModel->addOrdersDetail($id_orders, $pro_id, $product_price, $quantity);
-            // $this->cartModel->reduceStock($pro_id, $quantity);
-            $this->cartModel->clearCart($id_user, $pro_id);
+            header("Location: " . $_ENV['BASE_URL'] . 'home');
+            exit;
         }
-
-        header("Location: " . $_ENV['BASE_URL'] . 'home' );
-        exit;
     }
 }
-
-}
-?>
