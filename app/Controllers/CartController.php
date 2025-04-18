@@ -49,7 +49,7 @@ class CartController
         $id_user = $_SESSION['user']['id_user'];
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $this->cartModel->addtoCart($id_user);
-            $_SESSION['toast'] = 'Đã thêm sản phẩm vào giỏ hàng!';
+            $_SESSION['success'] = 'Đã thêm sản phẩm vào giỏ hàng!';
             header('location: ' . $_ENV['BASE_URL'] . 'home');
             exit;
         }
