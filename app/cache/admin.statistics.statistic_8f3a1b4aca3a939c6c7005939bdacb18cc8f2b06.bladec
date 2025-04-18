@@ -19,7 +19,7 @@
  </form>
  <?php if(isset($data['total'])): ?>
  <h3>Kết quả thống kê từ <?= htmlspecialchars($_POST['start_date']) ?> đến <?= htmlspecialchars($_POST['end_date']) ?>:</h3>
- <p><strong>Doanh thu:</strong> $<?= htmlspecialchars(number_format($data['total'], 2)) ?></p>
+ <p><strong>Doanh thu:</strong> VNĐ<?= htmlspecialchars(number_format($data['total'], 2)) ?></p>
  <p><strong>Tổng số đơn hàng:</strong> <?= htmlspecialchars($data['total_orders']) ?></p>
  <p><strong>Số đơn hàng bị hủy <?= htmlspecialchars($data['canceled_orders']) ?></strong></p>
  <?php elseif($_SERVER['REQUEST_METHOD'] === 'POST'): ?>

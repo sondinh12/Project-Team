@@ -3,5 +3,5 @@
 @section('title','Đơn hàng')
 
 @section('content')
-s
+
 @endsection

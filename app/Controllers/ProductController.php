@@ -122,7 +122,7 @@ class ProductController {
 
     public function show($id){
         $detailPro = $this->proModel->getProOld($id);
-        Blade::render('products.show',['detailPro'=>$detailPro]);
+        Blade::render('admin.products.show',['detailPro'=>$detailPro]);
     }
 }
 ?>
