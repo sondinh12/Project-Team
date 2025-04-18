@@ -164,4 +164,17 @@ class UserController
         header('location: ' . $_ENV['BASE_URL'] . 'admin/users');
         exit;
     }
+    public function changerole($id)
+    {
+        $user = $this->UserModel->FindUserByID($id);
+        if ($user['role'] == 'admin') {
+            $this->UserModel->changeRole($id, 'user');
+            $_SESSION['message'] = 'Đổi quyền thành công.';
+        } else {
+            $this->UserModel->changeRole($id, 'admin');
+            $_SESSION['message'] = 'Đổi quyền thành công.';
+        }
+        header('location: ' . $_ENV['BASE_URL'] . 'admin/users');
+        exit;
+    }
 }
