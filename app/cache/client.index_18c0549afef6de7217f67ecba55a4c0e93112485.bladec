@@ -3,6 +3,14 @@
 <?php $this->startSection('title','Trang chủ'); ?>
 
 <?php $this->startSection('content'); ?>
+<?php if(!empty($_SESSION['toast'])): ?>
+ <script>
+ document.addEventListener("DOMContentLoaded", function() {
+ showPopup();
+ });
+ </script>
+ <?php unset($_SESSION['toast']); ?>
+<?php endif; ?>
 <!-- Featured Start -->
 <div class="container-fluid pt-5">
  <div class="row px-xl-5 pb-3">
@@ -180,6 +188,32 @@
  </div>
  </div>
 </div>
+
+<!-- Subscribe End -->
+
+
+<!-- Products Start -->
+<?php /* <div class="container-fluid pt-5">
+ <div class="text-center mb-4">
+ <h2 class="section-title px-5"><span class="px-2">Just Arrived</span></h2>
+ </div>
+ <div class="row px-xl-5 pb-3">
+ <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
+ <div class="card product-item border-0 mb-4">
+ <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
+ <img class="img-fluid w-100" src="img/product-1.jpg" alt="">
+ </div>
+ <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
+ <h6 class="text-truncate mb-3">Colorful Stylish Shirt</h6>
+ <div class="d-flex justify-content-center">
+ <h6>$123.00</h6><h6 class="text-muted ml-2"><del>$123.00</del></h6>
+ </div>
+ </div>
+ <div class="card-footer d-flex justify-content-between bg-light border">
+ <a href="" class="btn btn-sm text-dark p-0"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a>
+ <a href="" class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart</a>
+ </div>
+ */ ?>
 <?php if(isset($_SESSION['success'])): ?>
  <div id="custom-popup" style="
  position: fixed;
@@ -203,13 +237,56 @@
 
  </p>
  </div>
- <?php unset($_SESSION['success']); ?>
+ </div>
+</div>
+<?php unset($_SESSION['success']); ?>
  <?php endif; ?>
+<!-- Products End -->
+
+<?php $this->stopSection(); ?>
+
+<?php $this->startSection('popup'); ?>
+ <div id="custom-popup" style="
+ position: fixed;
+ top: 50%;
+ left: 50%;
+ transform: translate(-50%, -50%);
+ background-color: white;
+ padding: 30px;
+ border-radius: 12px;
+ box-shadow: 0 0 20px rgba(0,0,0,0.3);
+ z-index: 99999;
+ display: none;
+ text-align: center;
+ animation: popup-fadein 0.3s ease;
+ ">
+ <div class="checkmark-circle">
+ <div class="background"></div>
+ <div class="checkmark draw"></div>
+ </div>
+ <p style="margin-top: 10px; font-weight: bold;">Thêm sản phẩm vào giỏ hàng thành công!</p>
+ </div>
+<?php $this->stopSection(); ?>
+
+<?php $this->startSection('script'); ?>
+<script>
+ function showPopup() {
+ const popup = document.getElementById('custom-popup');
+ popup.style.display = 'block';
+
+ setTimeout(() => {
+ popup.style.display = 'none';
+ }, 2000);
+}
+</script>
+
+ 
  <script>
  setTimeout(() => {
  const popup = document.getElementById('custom-popup');
  if (popup) popup.style.display = 'none';
  }, 3000);
  </script>
+
 <?php $this->stopSection(); ?>
 <?php if (isset($_shouldextend[1])) { echo $this->runChild('client.layouts.layout'); } ?>

@@ -3,8 +3,7 @@
 @section('title', 'Giỏ hàng')
 
 @section('content')
-
-@if(isset($_SESSION['success']))
+@if(isset($_SESSION['toast']))
         <div id="custom-popup" style="
             position: fixed;
             top: 50%;
@@ -23,10 +22,10 @@
                 <div class="checkmark draw"></div>
             </div>
             <p id="popup-message" style="margin-top: 15px; font-weight: bold;">
-                {{ $_SESSION['success'] }}
+                {{ $_SESSION['toast'] }}
             </p>
         </div>
-        @unset($_SESSION['success'])
+        @unset($_SESSION['toast'])
     @endif
     <script>
        setTimeout(() => {
@@ -133,30 +132,6 @@
     </div>
 </form>
 @endsection
-
-@section('popup')
-<div id="custom-popup" style="
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: white;
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 0 20px rgba(0,0,0,0.3);
-    z-index: 99999;
-    display: none;
-    text-align: center;
-    animation: popup-fadein 0.3s ease;
-">
-    <div class="checkmark-circle">
-        <div class="background"></div>
-        <div class="checkmark draw"></div>
-    </div>
-    <p id="popup-message" style="margin-top: 15px; font-weight: bold;"></p>
-</div>
-@endsection
-
 
 @section('script')
     <script>
